@@ -9,17 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    @property --border-angle {
-      syntax: '<angle>';
-      inherits: false;
-      initial-value: 0deg;
-    }
+    @property --border-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 
     body {
       min-height: 100vh; overflow: hidden;
-      font-family: 'Inter', sans-serif;
-      background: #08080e;
+      font-family: 'Inter', sans-serif; background: #08080e;
       display: flex; align-items: center; justify-content: center;
       position: relative; cursor: none;
     }
@@ -29,37 +23,13 @@
     .bg-orb {
       position: absolute; border-radius: 50%;
       filter: blur(90px); will-change: transform;
+      transition: transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
     }
-    .bg-orb--1 {
-      width: 600px; height: 600px;
-      background: rgba(139,92,246,0.22);
-      top: -15%; left: -10%;
-      animation: orb1 20s ease-in-out infinite alternate;
-    }
-    .bg-orb--2 {
-      width: 500px; height: 500px;
-      background: rgba(236,72,153,0.18);
-      bottom: -15%; right: -10%;
-      animation: orb2 25s ease-in-out infinite alternate;
-    }
-    .bg-orb--3 {
-      width: 400px; height: 400px;
-      background: rgba(96,165,250,0.14);
-      top: 40%; left: 55%;
-      animation: orb3 18s ease-in-out infinite alternate;
-    }
-    .bg-orb--4 {
-      width: 300px; height: 300px;
-      background: rgba(192,132,252,0.16);
-      top: 15%; right: 25%;
-      animation: orb4 22s ease-in-out infinite alternate;
-    }
-    @keyframes orb1 { to { transform: translate(100px,80px) scale(1.2); } }
-    @keyframes orb2 { to { transform: translate(-80px,-60px) scale(1.15); } }
-    @keyframes orb3 { to { transform: translate(-60px,-50px) scale(1.25); } }
-    @keyframes orb4 { to { transform: translate(-40px,60px) scale(0.9); } }
+    .bg-orb--1 { width: 600px; height: 600px; background: rgba(139,92,246,0.22); top: -15%; left: -10%; }
+    .bg-orb--2 { width: 500px; height: 500px; background: rgba(236,72,153,0.18); bottom: -15%; right: -10%; }
+    .bg-orb--3 { width: 400px; height: 400px; background: rgba(96,165,250,0.14); top: 40%; left: 55%; }
+    .bg-orb--4 { width: 300px; height: 300px; background: rgba(192,132,252,0.16); top: 15%; right: 25%; }
 
-    /* ===== NOISE ===== */
     .noise {
       position: fixed; inset: 0; z-index: 1; opacity: 0.03; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -72,10 +42,7 @@
       position: absolute; border: 1px solid rgba(168,85,247,0.06);
       opacity: 0; animation: geoIn 2s ease forwards, geoSpin var(--dur) linear infinite;
     }
-    .geo--hex {
-      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-      border: none; background: rgba(168,85,247,0.025);
-    }
+    .geo--hex { clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); border: none; background: rgba(168,85,247,0.025); }
     .geo--diamond { transform: rotate(45deg); border-color: rgba(244,114,182,0.05); }
     .geo--ring { border-radius: 50%; border-color: rgba(96,165,250,0.05); }
     @keyframes geoIn { to { opacity: 1; } }
@@ -89,10 +56,12 @@
     .sparkle {
       position: absolute; border-radius: 50%;
       animation: twinkle var(--dur) ease-in-out infinite; opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
     }
     .sp-w { background: rgba(255,255,255,0.9); box-shadow: 0 0 5px 1px rgba(255,255,255,0.2); }
     .sp-v { background: rgba(168,85,247,0.7); box-shadow: 0 0 5px 1px rgba(168,85,247,0.2); }
     .sp-r { background: rgba(244,114,182,0.6); box-shadow: 0 0 5px 1px rgba(244,114,182,0.2); }
+    .sparkle.bright { transform: scale(2.5) !important; opacity: 1 !important; }
     @keyframes twinkle { 0%,100% { opacity: 0; transform: scale(0); } 50% { opacity: 0.9; transform: scale(1); } }
 
     /* ===== CURSOR ===== */
@@ -119,7 +88,6 @@
     }
     @keyframes sparkFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0) translateY(-12px); } }
 
-    /* ===== CLICK RIPPLE ===== */
     .ripple {
       position: fixed; pointer-events: none; z-index: 49;
       border: 1px solid rgba(168,85,247,0.4); border-radius: 50%;
@@ -131,15 +99,20 @@
     }
 
     /* ===== GLASS CARD ===== */
-    .card {
+    .card-wrap {
       position: relative; z-index: 10;
+      opacity: 0; transform: translateY(40px) scale(0.96);
+    }
+    .card-wrap.visible {
+      animation: cardIn 0.9s cubic-bezier(0.23,1,0.32,1) forwards;
+    }
+    .card {
       padding: 56px 72px 44px; border-radius: 20px;
       background: rgba(255,255,255,0.03);
       backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
       box-shadow: 0 0 0 1px rgba(255,255,255,0.05) inset, 0 30px 80px rgba(0,0,0,0.5), 0 0 120px rgba(168,85,247,0.06);
       text-align: center;
-      opacity: 0; transform: translateY(40px) scale(0.96);
-      animation: cardIn 0.9s 0.3s cubic-bezier(0.23,1,0.32,1) forwards;
+      animation: cardBreathe 6s ease-in-out infinite;
     }
     .card::before {
       content: ''; position: absolute; inset: -1px; border-radius: 21px; padding: 1px;
@@ -157,17 +130,18 @@
     }
     @keyframes glowPulse { 0%,100% { opacity: 0.3; left: 20%; right: 20%; } 50% { opacity: 1; left: 8%; right: 8%; } }
     @keyframes cardIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes cardBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.004); } }
 
-    /* ===== CARD GLOW ===== */
     .card-glow {
       position: absolute; z-index: 9;
       width: 500px; height: 300px; border-radius: 50%;
       background: radial-gradient(ellipse, rgba(168,85,247,0.08) 0%, transparent 70%);
       top: 50%; left: 50%; transform: translate(-50%,-50%);
       pointer-events: none;
-      animation: cardGlowPulse 5s ease-in-out infinite;
+      opacity: 0; transition: opacity 1s ease;
     }
-    @keyframes cardGlowPulse { 0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.15); } }
+    .card-glow.visible { opacity: 1; animation: cardGlowPulse 5s ease-in-out infinite; }
+    @keyframes cardGlowPulse { 0%,100% { transform: translate(-50%,-50%) scale(1); } 50% { transform: translate(-50%,-50%) scale(1.15); } }
 
     /* ===== TEXT ===== */
     .greeting {
@@ -189,12 +163,13 @@
     }
     .letter {
       display: inline-block; opacity: 0;
-      animation: letterIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
       transition: text-shadow 0.3s, transform 0.3s;
+    }
+    .letter.revealed {
+      animation: letterIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
     }
     .letter:hover {
       text-shadow: 0 0 20px rgba(168,85,247,0.7), 0 0 50px rgba(244,114,182,0.3) !important;
-      transform: translateY(-4px) scale(1.08);
     }
     @keyframes letterIn { 0% { opacity: 0; transform: translateY(18px); } 100% { opacity: 1; transform: translateY(0); } }
 
@@ -202,8 +177,9 @@
     .wave-bars {
       display: flex; justify-content: center; gap: 3px;
       margin-top: 18px; height: 20px; align-items: flex-end;
-      opacity: 0; animation: fadeIn 0.5s 2.2s ease forwards;
+      opacity: 0; transition: opacity 0.6s ease;
     }
+    .wave-bars.visible { opacity: 1; }
     .wave-bar {
       width: 3px; border-radius: 2px;
       background: linear-gradient(to top, rgba(168,85,247,0.4), rgba(244,114,182,0.4));
@@ -211,12 +187,13 @@
     }
     @keyframes wave { 0% { height: 3px; } 100% { height: var(--h); } }
 
-    /* ===== CSS HEARTS (card row) ===== */
+    /* ===== CSS HEARTS ===== */
     .hearts-row {
       display: flex; justify-content: center; gap: 16px;
       margin-top: 22px;
-      opacity: 0; animation: fadeIn 0.5s 2.4s ease forwards;
+      opacity: 0; transition: opacity 0.6s ease;
     }
+    .hearts-row.visible { opacity: 1; }
     .css-heart {
       position: relative; width: 24px; height: 22px;
       cursor: none;
@@ -230,28 +207,21 @@
     }
     .css-heart::before, .css-heart::after {
       content: ''; position: absolute; top: 0;
-      width: 14px; height: 20px;
-      border-radius: 14px 14px 0 0;
+      width: 14px; height: 20px; border-radius: 14px 14px 0 0;
       background: var(--c1);
     }
-    .css-heart::before {
-      left: 12px; transform: rotate(-45deg); transform-origin: 0 100%;
-    }
-    .css-heart::after {
-      left: 0; transform: rotate(45deg); transform-origin: 100% 100%;
-    }
+    .css-heart::before { left: 12px; transform: rotate(-45deg); transform-origin: 0 100%; }
+    .css-heart::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
     .css-heart .shimmer {
       position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
       width: 5px; height: 5px; border-radius: 50%;
       background: rgba(255,255,255,0.5); filter: blur(2px); z-index: 1;
     }
-
     @keyframes heartBob {
       0%,100% { transform: translateY(0) scale(1) rotate(0deg); }
       30% { transform: translateY(-5px) scale(1.08) rotate(-3deg); }
       60% { transform: translateY(-2px) scale(1.03) rotate(2deg); }
     }
-
     .css-heart:nth-child(1) { animation-delay: 0s; --c1: #a78bfa; --glow: rgba(167,139,250,0.5); }
     .css-heart:nth-child(2) { animation-delay: 0.25s; --c1: #f472b6; --glow: rgba(244,114,182,0.5); }
     .css-heart:nth-child(3) { animation-delay: 0.5s; --c1: #e2e8f0; --glow: rgba(226,232,240,0.4); }
@@ -266,11 +236,12 @@
       border: 1px solid rgba(255,255,255,0.1);
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       color: rgba(255,255,255,0.7);
-      font-size: 1.2rem; cursor: pointer;
+      cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       transition: all 0.3s ease;
-      opacity: 0; animation: fadeIn 0.5s 3s ease forwards;
+      opacity: 0; transform: scale(0.8);
     }
+    .audio-btn.visible { opacity: 1; transform: scale(1); transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }
     .audio-btn:hover {
       background: rgba(255,255,255,0.1);
       border-color: rgba(168,85,247,0.4); color: #fff;
@@ -285,8 +256,6 @@
     .audio-btn .bar:nth-child(4) { height: 8px; --mh: 8px; }
     .audio-btn:not(.playing) .bar { height: 3px !important; animation: none; }
     @keyframes audioBar { 0% { height: 3px; } 100% { height: var(--mh); } }
-
-    @keyframes fadeIn { to { opacity: 1; } }
 
     /* ===== CLICK BURST ===== */
     .click-burst {
@@ -311,10 +280,10 @@
 <body>
 
   <div class="bg">
-    <div class="bg-orb bg-orb--1"></div>
-    <div class="bg-orb bg-orb--2"></div>
-    <div class="bg-orb bg-orb--3"></div>
-    <div class="bg-orb bg-orb--4"></div>
+    <div class="bg-orb bg-orb--1" id="orb1"></div>
+    <div class="bg-orb bg-orb--2" id="orb2"></div>
+    <div class="bg-orb bg-orb--3" id="orb3"></div>
+    <div class="bg-orb bg-orb--4" id="orb4"></div>
   </div>
   <div class="noise"></div>
   <div class="geo-container" id="geoBox"></div>
@@ -322,33 +291,24 @@
   <div class="sparkle-container" id="sparkles"></div>
   <div class="cursor-glow" id="cursorGlow"></div>
   <div class="cursor-dot" id="cursorDot"></div>
-  <div class="card-glow"></div>
+  <div class="card-glow" id="cardGlow"></div>
 
-  <div class="card" id="card">
-    <div class="greeting">
-      <div class="word--main">
-        <span class="letter">B</span><span class="letter">o</span><span class="letter">n</span><span class="letter">j</span><span class="letter">o</span><span class="letter">u</span><span class="letter">r</span>
+  <div class="card-wrap" id="cardWrap">
+    <div class="card" id="card">
+      <div class="greeting">
+        <div class="word--main" id="wordMain"></div>
+        <div class="word--name" id="wordName"></div>
       </div>
-      <div class="word--name">
-        <span class="letter">Y</span><span class="letter">o</span><span class="letter">u</span><span class="letter">s</span><span class="letter">r</span><span class="letter">a</span>
+      <div class="wave-bars" id="waveBars"></div>
+      <div class="hearts-row">
+        <div class="css-heart"><div class="shimmer"></div></div>
+        <div class="css-heart"><div class="shimmer"></div></div>
+        <div class="css-heart"><div class="shimmer"></div></div>
+        <div class="css-heart"><div class="shimmer"></div></div>
+        <div class="css-heart"><div class="shimmer"></div></div>
       </div>
-    </div>
-
-    <div class="wave-bars" id="waveBars"></div>
-
-    <div class="hearts-row">
-      <div class="css-heart"><div class="shimmer"></div></div>
-      <div class="css-heart"><div class="shimmer"></div></div>
-      <div class="css-heart"><div class="shimmer"></div></div>
-      <div class="css-heart"><div class="shimmer"></div></div>
-      <div class="css-heart"><div class="shimmer"></div></div>
     </div>
   </div>
-
-  <!-- Clair de Lune — public domain (Debussy, 1905) via Wikimedia Commons -->
-  <audio id="bgMusic" loop preload="auto">
-    <source src="https://upload.wikimedia.org/wikipedia/commons/6/67/Clair_de_Lune_by_Claude_Debussy_%281905%2C_piano_solo%29.opus" type="audio/ogg; codecs=opus">
-  </audio>
 
   <button class="audio-btn" id="audioBtn" title="Toggle music">
     <div class="bars">
@@ -357,35 +317,155 @@
   </button>
 
   <script>
-    // ========================================
-    // AUDIO
-    // ========================================
-    const audio = document.getElementById('bgMusic');
-    const audioBtn = document.getElementById('audioBtn');
-    let audioPlaying = false;
+    // ============================================
+    // PROTO: Build greeting letters in DOM
+    // ============================================
+    const wordMain = document.getElementById('wordMain');
+    const wordName = document.getElementById('wordName');
+    'Bonjour'.split('').forEach(c => {
+      const s = document.createElement('span');
+      s.className = 'letter'; s.textContent = c;
+      wordMain.appendChild(s);
+    });
+    'Yousra'.split('').forEach(c => {
+      const s = document.createElement('span');
+      s.className = 'letter'; s.textContent = c;
+      wordName.appendChild(s);
+    });
+    const allLetters = document.querySelectorAll('.letter');
 
-    function toggleAudio() {
-      if (audioPlaying) {
-        audio.pause();
-        audioBtn.classList.remove('playing');
-      } else {
-        audio.volume = 0.3;
-        audio.play().then(() => audioBtn.classList.add('playing')).catch(() => {});
-      }
-      audioPlaying = !audioPlaying;
+    // ============================================
+    // WEB AUDIO API — PROCEDURAL PIANO
+    // ============================================
+    let audioCtx = null;
+    let masterGain = null;
+    let pianoPlaying = false;
+    let pianoInterval = null;
+
+    const NOTES = {
+      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00,
+      A4: 440.00, B4: 493.88, C5: 523.25, D5: 587.33, E5: 659.25,
+      F5: 698.46, G5: 783.99
+    };
+
+    // romantic arpeggio: C major → Am → F → G (looping)
+    const PROGRESSION = [
+      [NOTES.C4, NOTES.E4, NOTES.G4, NOTES.C5, NOTES.E5],
+      [NOTES.A4, NOTES.C5, NOTES.E5, NOTES.A4, NOTES.C5],
+      [NOTES.F4, NOTES.A4, NOTES.C5, NOTES.F5, NOTES.A4],
+      [NOTES.G4, NOTES.B4, NOTES.D5, NOTES.G5, NOTES.B4],
+    ];
+
+    function initAudio() {
+      if (audioCtx) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.25;
+
+      // reverb via delay
+      const delay = audioCtx.createDelay(0.5);
+      delay.delayTime.value = 0.3;
+      const feedback = audioCtx.createGain();
+      feedback.gain.value = 0.3;
+      const wetGain = audioCtx.createGain();
+      wetGain.gain.value = 0.2;
+
+      masterGain.connect(audioCtx.destination);
+      masterGain.connect(delay);
+      delay.connect(feedback);
+      feedback.connect(delay);
+      delay.connect(wetGain);
+      wetGain.connect(audioCtx.destination);
     }
 
-    audioBtn.addEventListener('click', toggleAudio);
+    function playNote(freq, time, duration) {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime + time;
 
-    // auto-play on first interaction
-    document.addEventListener('click', function autoPlay() {
-      if (!audioPlaying) toggleAudio();
-      document.removeEventListener('click', autoPlay);
-    }, { once: true });
+      // main oscillator (sine for soft piano)
+      const osc1 = audioCtx.createOscillator();
+      osc1.type = 'sine';
+      osc1.frequency.value = freq;
 
-    // ========================================
+      // harmonics for richness
+      const osc2 = audioCtx.createOscillator();
+      osc2.type = 'sine';
+      osc2.frequency.value = freq * 2;
+
+      const osc3 = audioCtx.createOscillator();
+      osc3.type = 'sine';
+      osc3.frequency.value = freq * 3;
+
+      const gain1 = audioCtx.createGain();
+      const gain2 = audioCtx.createGain();
+      const gain3 = audioCtx.createGain();
+
+      gain1.gain.setValueAtTime(0.4, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      gain2.gain.setValueAtTime(0.12, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.6);
+
+      gain3.gain.setValueAtTime(0.04, now);
+      gain3.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.4);
+
+      osc1.connect(gain1); osc2.connect(gain2); osc3.connect(gain3);
+      gain1.connect(masterGain); gain2.connect(masterGain); gain3.connect(masterGain);
+
+      osc1.start(now); osc2.start(now); osc3.start(now);
+      osc1.stop(now + duration); osc2.stop(now + duration); osc3.stop(now + duration);
+    }
+
+    let chordIndex = 0;
+    let noteIndex = 0;
+
+    function playArpeggio() {
+      if (!pianoPlaying) return;
+      const chord = PROGRESSION[chordIndex];
+      const note = chord[noteIndex];
+      const isLast = noteIndex === chord.length - 1;
+      const dur = isLast ? 2.0 : 1.2;
+      const gap = isLast ? 1.0 : 0.5;
+
+      playNote(note, 0, dur);
+
+      noteIndex++;
+      if (noteIndex >= chord.length) {
+        noteIndex = 0;
+        chordIndex = (chordIndex + 1) % PROGRESSION.length;
+      }
+
+      pianoInterval = setTimeout(playArpeggio, gap * 1000);
+    }
+
+    function togglePiano() {
+      initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      if (pianoPlaying) {
+        pianoPlaying = false;
+        clearTimeout(pianoInterval);
+        audioBtn.classList.remove('playing');
+      } else {
+        pianoPlaying = true;
+        chordIndex = 0; noteIndex = 0;
+        playArpeggio();
+        audioBtn.classList.add('playing');
+      }
+    }
+
+    // ============================================
+    // AUDIO BUTTON
+    // ============================================
+    const audioBtn = document.getElementById('audioBtn');
+    audioBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePiano();
+    });
+
+    // ============================================
     // CURSOR
-    // ========================================
+    // ============================================
     const glowEl = document.getElementById('cursorGlow');
     const dotEl = document.getElementById('cursorDot');
     let mx = innerWidth / 2, my = innerHeight / 2;
@@ -420,6 +500,7 @@
     });
 
     document.addEventListener('click', e => {
+      if (e.target.closest('.audio-btn')) return;
       const r = document.createElement('div');
       r.className = 'ripple';
       r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
@@ -427,20 +508,38 @@
       r.addEventListener('animationend', () => r.remove());
     });
 
-    // ========================================
-    // 3D TILT
-    // ========================================
+    // ============================================
+    // 3D TILT + CARD BREATHING
+    // ============================================
     const card = document.getElementById('card');
     document.addEventListener('mousemove', e => {
       const cx = innerWidth/2, cy = innerHeight/2;
       const rx = ((e.clientY - cy) / cy) * -3;
       const ry = ((e.clientX - cx) / cx) * 3;
-      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1)`;
     });
 
-    // ========================================
+    // ============================================
+    // BACKGROUND ORB PARALLAX
+    // ============================================
+    const orb1 = document.getElementById('orb1');
+    const orb2 = document.getElementById('orb2');
+    const orb3 = document.getElementById('orb3');
+    const orb4 = document.getElementById('orb4');
+
+    document.addEventListener('mousemove', e => {
+      const cx = innerWidth / 2, cy = innerHeight / 2;
+      const dx = (e.clientX - cx) / cx;
+      const dy = (e.clientY - cy) / cy;
+      orb1.style.transform = `translate(${dx * -15}px, ${dy * -15}px)`;
+      orb2.style.transform = `translate(${dx * 12}px, ${dy * 12}px)`;
+      orb3.style.transform = `translate(${dx * -10}px, ${dy * 10}px)`;
+      orb4.style.transform = `translate(${dx * 8}px, ${dy * -8}px)`;
+    });
+
+    // ============================================
     // WAVE BARS
-    // ========================================
+    // ============================================
     const waveBox = document.getElementById('waveBars');
     for (let i = 0; i < 20; i++) {
       const bar = document.createElement('div');
@@ -451,22 +550,23 @@
       waveBox.appendChild(bar);
     }
 
-    // ========================================
+    // ============================================
     // GEOMETRIC
-    // ========================================
+    // ============================================
     const geoBox = document.getElementById('geoBox');
-    const geoTypes = ['geo--hex', 'geo--diamond', 'geo--ring'];
-    for (let i = 0; i < 10; i++) {
-      const g = document.createElement('div');
-      g.className = 'geo ' + geoTypes[i % 3];
-      const s = 30 + Math.random() * 80;
-      g.style.cssText = `--s:${s}px;--dur:${20+Math.random()*30}s;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s,${Math.random()*10}s;opacity:0`;
-      geoBox.appendChild(g);
-    }
+    ['geo--hex','geo--diamond','geo--ring'].forEach((cls, i) => {
+      for (let j = 0; j < 3 + i; j++) {
+        const g = document.createElement('div');
+        g.className = 'geo ' + cls;
+        const s = 30 + Math.random() * 80;
+        g.style.cssText = `--s:${s}px;--dur:${20+Math.random()*30}s;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s,${Math.random()*10}s;opacity:0`;
+        geoBox.appendChild(g);
+      }
+    });
 
-    // ========================================
+    // ============================================
     // CANVAS — DRAWN HEARTS + PETALS + DOTS
-    // ========================================
+    // ============================================
     const canvas = document.getElementById('canvasLayer');
     const ctx = canvas.getContext('2d');
     let W, H;
@@ -475,135 +575,111 @@
     resize();
     addEventListener('resize', resize);
 
-    // ---- draw heart shape ----
     function drawHeart(x, y, size, rot, alpha, colors) {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(rot);
       ctx.globalAlpha = alpha;
-
       const s = size;
       ctx.beginPath();
       ctx.moveTo(0, s * 0.35);
       ctx.bezierCurveTo(-s * 0.05, s * 0.1, -s * 0.8, -s * 0.35, 0, -s * 0.7);
       ctx.bezierCurveTo(s * 0.8, -s * 0.35, s * 0.05, s * 0.1, 0, s * 0.35);
       ctx.closePath();
-
       const grad = ctx.createRadialGradient(-s * 0.2, -s * 0.3, 0, 0, 0, s);
-      grad.addColorStop(0, colors[0]);
-      grad.addColorStop(0.6, colors[1]);
-      grad.addColorStop(1, colors[2]);
+      grad.addColorStop(0, colors[0]); grad.addColorStop(0.6, colors[1]); grad.addColorStop(1, colors[2]);
       ctx.fillStyle = grad;
-
-      ctx.shadowColor = colors[1];
-      ctx.shadowBlur = size * 0.4;
+      ctx.shadowColor = colors[1]; ctx.shadowBlur = size * 0.4;
       ctx.fill();
-
-      // highlight
       ctx.shadowBlur = 0;
       ctx.beginPath();
       ctx.arc(-s * 0.2, -s * 0.35, s * 0.12, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(255,255,255,0.35)';
       ctx.fill();
-
       ctx.restore();
     }
 
-    // ---- draw petal shape ----
     function drawPetal(x, y, w, h, rot, alpha, colors) {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(rot);
       ctx.globalAlpha = alpha;
-
       ctx.beginPath();
       ctx.moveTo(0, -h * 0.5);
       ctx.bezierCurveTo(w * 0.8, -h * 0.3, w * 0.6, h * 0.5, 0, h * 0.5);
       ctx.bezierCurveTo(-w * 0.6, h * 0.5, -w * 0.8, -h * 0.3, 0, -h * 0.5);
       ctx.closePath();
-
       const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, h * 0.6);
-      grad.addColorStop(0, colors[0]);
-      grad.addColorStop(1, colors[1]);
+      grad.addColorStop(0, colors[0]); grad.addColorStop(1, colors[1]);
       ctx.fillStyle = grad;
-
-      ctx.shadowColor = colors[0];
-      ctx.shadowBlur = w * 0.3;
+      ctx.shadowColor = colors[0]; ctx.shadowBlur = w * 0.3;
       ctx.fill();
-
       ctx.restore();
     }
 
-    // ---- heart palette ----
     const heartPalettes = [
-      ['#e0b0ff', '#c084fc', '#7c3aed'],
-      ['#fbcfe8', '#f472b6', '#be185d'],
-      ['#e2e8f0', '#c4b5fd', '#7c3aed'],
-      ['#fecdd3', '#fb7185', '#be123c'],
-      ['#ddd6fe', '#a78bfa', '#6d28d9'],
+      ['#e0b0ff','#c084fc','#7c3aed'],
+      ['#fbcfe8','#f472b6','#be185d'],
+      ['#e2e8f0','#c4b5fd','#7c3aed'],
+      ['#fecdd3','#fb7185','#be123c'],
+      ['#ddd6fe','#a78bfa','#6d28d9'],
     ];
-
-    // ---- petal palette ----
     const petalPalettes = [
-      ['#fda4af', '#f43f5e'],
-      ['#fecdd3', '#fb7185'],
-      ['#fbcfe8', '#f472b6'],
-      ['#e2e8f0', '#c4b5fd'],
-      ['#ddd6fe', '#a78bfa'],
+      ['#fda4af','#f43f5e'],
+      ['#fecdd3','#fb7185'],
+      ['#fbcfe8','#f472b6'],
+      ['#e2e8f0','#c4b5fd'],
+      ['#ddd6fe','#a78bfa'],
     ];
 
-    // ---- items ----
     const items = [];
 
     function makeItem(type, init) {
       if (type === 'heart') {
         const pal = heartPalettes[Math.floor(Math.random() * heartPalettes.length)];
         return {
-          type: 'heart',
-          x: Math.random() * W,
-          y: init ? Math.random() * H : H + 40,
-          size: 14 + Math.random() * 16,
-          speedY: -(0.12 + Math.random() * 0.35),
-          speedX: (Math.random() - 0.5) * 0.25,
-          opacity: 0.3 + Math.random() * 0.4,
-          wobble: Math.random() * Math.PI * 2,
-          wSpeed: 0.005 + Math.random() * 0.01,
-          wAmp: 0.2 + Math.random() * 0.35,
-          rot: (Math.random() - 0.5) * 0.3,
-          rSpeed: (Math.random() - 0.5) * 0.003,
-          colors: pal
+          type:'heart', x: Math.random()*W,
+          y: init ? Math.random()*H : H+40,
+          size: 14+Math.random()*16,
+          speedY: -(0.12+Math.random()*0.35),
+          speedX: (Math.random()-0.5)*0.25,
+          opacity: 0.3+Math.random()*0.4,
+          wobble: Math.random()*Math.PI*2,
+          wSpeed: 0.005+Math.random()*0.01,
+          wAmp: 0.2+Math.random()*0.35,
+          rot: (Math.random()-0.5)*0.3,
+          rSpeed: (Math.random()-0.5)*0.003,
+          colors: pal, baseX: 0
         };
       } else if (type === 'petal') {
         const pal = petalPalettes[Math.floor(Math.random() * petalPalettes.length)];
         return {
-          type: 'petal',
-          x: Math.random() * W,
-          y: init ? Math.random() * H : -30,
-          w: 8 + Math.random() * 10,
-          h: 16 + Math.random() * 14,
-          speedY: 0.1 + Math.random() * 0.3,
-          speedX: (Math.random() - 0.5) * 0.2,
-          opacity: 0.2 + Math.random() * 0.35,
-          wobble: Math.random() * Math.PI * 2,
-          wSpeed: 0.004 + Math.random() * 0.008,
-          wAmp: 0.15 + Math.random() * 0.3,
-          rot: Math.random() * Math.PI * 2,
-          rSpeed: (Math.random() - 0.5) * 0.015,
-          colors: pal
+          type:'petal', x: Math.random()*W,
+          y: init ? Math.random()*H : -30,
+          w: 8+Math.random()*10, h: 16+Math.random()*14,
+          speedY: 0.1+Math.random()*0.3,
+          speedX: (Math.random()-0.5)*0.2,
+          opacity: 0.2+Math.random()*0.35,
+          wobble: Math.random()*Math.PI*2,
+          wSpeed: 0.004+Math.random()*0.008,
+          wAmp: 0.15+Math.random()*0.3,
+          rot: Math.random()*Math.PI*2,
+          rSpeed: (Math.random()-0.5)*0.015,
+          colors: pal, baseX: 0
         };
       } else {
         return {
-          type: 'dot',
-          x: Math.random() * W,
-          y: init ? Math.random() * H : H + 10,
-          size: 0.8 + Math.random() * 1.8,
-          speedY: -(0.04 + Math.random() * 0.12),
-          speedX: (Math.random() - 0.5) * 0.08,
-          opacity: 0.08 + Math.random() * 0.18,
-          wobble: Math.random() * Math.PI * 2,
-          wSpeed: 0.003 + Math.random() * 0.006,
-          wAmp: 0.1 + Math.random() * 0.15,
-          color: `rgba(168,85,247,${0.3 + Math.random() * 0.4})`
+          type:'dot', x: Math.random()*W,
+          y: init ? Math.random()*H : H+10,
+          size: 0.8+Math.random()*1.8,
+          speedY: -(0.04+Math.random()*0.12),
+          speedX: (Math.random()-0.5)*0.08,
+          opacity: 0.08+Math.random()*0.18,
+          wobble: Math.random()*Math.PI*2,
+          wSpeed: 0.003+Math.random()*0.006,
+          wAmp: 0.1+Math.random()*0.15,
+          color: `rgba(168,85,247,${0.3+Math.random()*0.4})`,
+          baseOpacity: 0, baseX: 0
         };
       }
     }
@@ -612,11 +688,46 @@
     for (let i = 0; i < 18; i++) items.push(makeItem('petal', true));
     for (let i = 0; i < 55; i++) items.push(makeItem('dot', true));
 
+    // store base positions for mouse interaction
+    items.forEach(p => { p.baseX = p.x; });
+
+    // ============================================
+    // MOUSE-REACTIVE PARTICLES
+    // ============================================
+    function dist(ax, ay, bx, by) {
+      const dx = ax - bx, dy = ay - by;
+      return Math.sqrt(dx*dx + dy*dy);
+    }
+
     function updateItem(p) {
       p.wobble += p.wSpeed;
       p.x += p.speedX + Math.sin(p.wobble) * (p.wAmp || 0.15);
       p.y += p.speedY;
       p.rot += p.rSpeed || 0;
+
+      // mouse interaction
+      const d = dist(p.x, p.y, mx, my);
+
+      if (p.type === 'heart' && d < 160) {
+        // attract hearts toward cursor
+        const force = (160 - d) / 160 * 0.8;
+        p.x += (mx - p.x) * force * 0.02;
+        p.y += (my - p.y) * force * 0.02;
+      }
+
+      if (p.type === 'petal' && d < 120) {
+        // repel petals from cursor
+        const force = (120 - d) / 120 * 1.2;
+        p.x -= (mx - p.x) * force * 0.015;
+        p.y -= (my - p.y) * force * 0.015;
+      }
+
+      if (p.type === 'dot' && d < 150) {
+        // glow dots brighter near cursor
+        p.opacity = Math.min(0.8, (p.baseOpacity || p.opacity) + (150 - d) / 150 * 0.4);
+      } else if (p.type === 'dot') {
+        p.opacity += ((0.08 + Math.random() * 0.18) - p.opacity) * 0.02;
+      }
 
       if (p.type === 'heart' && p.y < -50) Object.assign(p, makeItem('heart', false));
       if (p.type === 'petal' && p.y > H + 50) Object.assign(p, makeItem('petal', false));
@@ -624,11 +735,9 @@
     }
 
     function drawItem(p) {
-      if (p.type === 'heart') {
-        drawHeart(p.x, p.y, p.size, p.rot, p.opacity, p.colors);
-      } else if (p.type === 'petal') {
-        drawPetal(p.x, p.y, p.w, p.h, p.rot, p.opacity, p.colors);
-      } else {
+      if (p.type === 'heart') drawHeart(p.x, p.y, p.size, p.rot, p.opacity, p.colors);
+      else if (p.type === 'petal') drawPetal(p.x, p.y, p.w, p.h, p.rot, p.opacity, p.colors);
+      else {
         ctx.save();
         ctx.globalAlpha = p.opacity;
         ctx.fillStyle = p.color;
@@ -646,46 +755,100 @@
     }
     loop();
 
-    // ========================================
-    // SPARKLES
-    // ========================================
+    // ============================================
+    // SPARKLES (with mouse interaction)
+    // ============================================
     const sparkleBox = document.getElementById('sparkles');
-    const spClasses = ['sp-w', 'sp-v', 'sp-r'];
+    const spClasses = ['sp-w','sp-v','sp-r'];
+    const sparkleEls = [];
     for (let i = 0; i < 60; i++) {
       const s = document.createElement('div');
-      s.className = 'sparkle ' + spClasses[Math.floor(Math.random() * 3)];
-      s.style.left = Math.random() * 100 + '%';
-      s.style.top = Math.random() * 100 + '%';
-      s.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
-      s.style.animationDelay = (Math.random() * 5) + 's';
-      const sz = 1.5 + Math.random() * 3;
-      s.style.width = sz + 'px'; s.style.height = sz + 'px';
+      s.className = 'sparkle ' + spClasses[Math.floor(Math.random()*3)];
+      const sl = Math.random()*100, st = Math.random()*100;
+      s.style.left = sl + '%'; s.style.top = st + '%';
+      s.style.setProperty('--dur', (2+Math.random()*4)+'s');
+      s.style.animationDelay = (Math.random()*5)+'s';
+      const sz = 1.5+Math.random()*3;
+      s.style.width = sz+'px'; s.style.height = sz+'px';
       sparkleBox.appendChild(s);
+      sparkleEls.push({ el: s, px: sl/100*innerWidth, py: st/100*innerHeight });
     }
 
-    // ========================================
+    // sparkle mouse proximity
+    (function checkSparkles() {
+      sparkleEls.forEach(sp => {
+        const d = dist(sp.px, sp.py, mx, my);
+        if (d < 180) sp.el.classList.add('bright');
+        else sp.el.classList.remove('bright');
+      });
+      requestAnimationFrame(checkSparkles);
+    })();
+
+    // ============================================
+    // LETTER MAGNETIC HOVER
+    // ============================================
+    allLetters.forEach((letter, i) => {
+      letter.addEventListener('mouseenter', () => {
+        allLetters.forEach((other, j) => {
+          if (i === j) return;
+          const dist = Math.abs(i - j);
+          if (dist <= 3) {
+            const dir = j < i ? -1 : 1;
+            const push = (4 - dist) * 3;
+            other.style.transform = `translateX(${dir * push}px)`;
+          }
+        });
+      });
+      letter.addEventListener('mouseleave', () => {
+        allLetters.forEach(other => { other.style.transform = ''; });
+      });
+    });
+
+    // ============================================
     // CLICK BURST
-    // ========================================
-    const burstSyms = ['✦', '✧', '♡', '·'];
-    const burstColors = ['#a78bfa', '#f472b6', '#c4b5fd', '#fff', '#f9a8d4'];
+    // ============================================
+    const burstSyms = ['✦','✧','♡','·'];
+    const burstColors = ['#a78bfa','#f472b6','#c4b5fd','#fff','#f9a8d4'];
     document.addEventListener('click', e => {
+      if (e.target.closest('.audio-btn')) return;
       for (let i = 0; i < 18; i++) {
         const el = document.createElement('span');
         el.className = 'click-burst';
-        el.textContent = burstSyms[Math.floor(Math.random() * burstSyms.length)];
-        el.style.left = e.clientX + 'px';
-        el.style.top = e.clientY + 'px';
-        const angle = (Math.PI * 2 / 18) * i + (Math.random() - 0.5) * 0.4;
-        const dist = 50 + Math.random() * 80;
-        el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-        el.style.setProperty('--ty', Math.sin(angle) * dist - 20 + 'px');
-        el.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
-        el.style.fontSize = (0.8 + Math.random() * 0.6) + 'rem';
-        el.style.color = burstColors[Math.floor(Math.random() * burstColors.length)];
+        el.textContent = burstSyms[Math.floor(Math.random()*burstSyms.length)];
+        el.style.left = e.clientX+'px'; el.style.top = e.clientY+'px';
+        const angle = (Math.PI*2/18)*i + (Math.random()-0.5)*0.4;
+        const dist = 50+Math.random()*80;
+        el.style.setProperty('--tx', Math.cos(angle)*dist+'px');
+        el.style.setProperty('--ty', Math.sin(angle)*dist-20+'px');
+        el.style.setProperty('--rot', (Math.random()*60-30)+'deg');
+        el.style.fontSize = (0.8+Math.random()*0.6)+'rem';
+        el.style.color = burstColors[Math.floor(Math.random()*burstColors.length)];
         document.body.appendChild(el);
         el.addEventListener('animationend', () => el.remove());
       }
     });
+
+    // ============================================
+    // LOAD SEQUENCE (JS-controlled timing)
+    // ============================================
+    setTimeout(() => { document.getElementById('cardGlow').classList.add('visible'); }, 100);
+    setTimeout(() => { document.getElementById('cardWrap').classList.add('visible'); }, 300);
+
+    // reveal Bonjour letters
+    const mainLetters = wordMain.querySelectorAll('.letter');
+    mainLetters.forEach((l, i) => {
+      setTimeout(() => { l.classList.add('revealed'); }, 600 + i * 100);
+    });
+
+    // reveal Yousra letters
+    const nameLetters = wordName.querySelectorAll('.letter');
+    nameLetters.forEach((l, i) => {
+      setTimeout(() => { l.classList.add('revealed'); }, 1400 + i * 100);
+    });
+
+    setTimeout(() => { waveBox.classList.add('visible'); }, 2100);
+    setTimeout(() => { document.querySelector('.hearts-row').classList.add('visible'); }, 2300);
+    setTimeout(() => { audioBtn.classList.add('visible'); }, 2800);
   </script>
 </body>
 </html>
