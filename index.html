@@ -6,7 +6,7 @@
   <title>Bonjour Yousra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -20,7 +20,7 @@
       min-height: 100vh;
       overflow: hidden;
       font-family: 'Inter', sans-serif;
-      background: #06060b;
+      background: #08080e;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -28,72 +28,48 @@
       cursor: none;
     }
 
-    /* ==============================
-       ANIMATED MESH BACKGROUND
-    ============================== */
-    .bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-    }
+    /* ===== MESH BACKGROUND ===== */
+    .bg { position: fixed; inset: 0; z-index: 0; }
 
     .bg-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      will-change: transform;
+      position: absolute; border-radius: 50%;
+      filter: blur(90px); will-change: transform;
     }
 
     .bg-orb--1 {
-      width: 500px; height: 500px;
-      background: rgba(139, 92, 246, 0.15);
-      top: -10%; left: -5%;
-      animation: orbDrift1 20s ease-in-out infinite alternate;
+      width: 600px; height: 600px;
+      background: rgba(139, 92, 246, 0.22);
+      top: -15%; left: -10%;
+      animation: orb1 20s ease-in-out infinite alternate;
     }
-
     .bg-orb--2 {
-      width: 450px; height: 450px;
-      background: rgba(244, 114, 182, 0.12);
-      bottom: -15%; right: -5%;
-      animation: orbDrift2 25s ease-in-out infinite alternate;
+      width: 500px; height: 500px;
+      background: rgba(236, 72, 153, 0.18);
+      bottom: -15%; right: -10%;
+      animation: orb2 25s ease-in-out infinite alternate;
     }
-
     .bg-orb--3 {
-      width: 350px; height: 350px;
-      background: rgba(96, 165, 250, 0.10);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      animation: orbDrift3 18s ease-in-out infinite alternate;
+      width: 400px; height: 400px;
+      background: rgba(96, 165, 250, 0.14);
+      top: 40%; left: 55%;
+      animation: orb3 18s ease-in-out infinite alternate;
     }
-
     .bg-orb--4 {
-      width: 250px; height: 250px;
-      background: rgba(168, 85, 247, 0.08);
-      top: 20%; right: 20%;
-      animation: orbDrift4 22s ease-in-out infinite alternate;
+      width: 300px; height: 300px;
+      background: rgba(192, 132, 252, 0.16);
+      top: 15%; right: 25%;
+      animation: orb4 22s ease-in-out infinite alternate;
     }
 
-    @keyframes orbDrift1 {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(80px, 60px) scale(1.15); }
-    }
-    @keyframes orbDrift2 {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-70px, -50px) scale(1.1); }
-    }
-    @keyframes orbDrift3 {
-      0% { transform: translate(-50%, -50%) scale(1); }
-      100% { transform: translate(calc(-50% + 40px), calc(-50% - 40px)) scale(1.2); }
-    }
-    @keyframes orbDrift4 {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-30px, 50px) scale(0.85); }
-    }
+    @keyframes orb1 { to { transform: translate(100px, 80px) scale(1.2); } }
+    @keyframes orb2 { to { transform: translate(-80px, -60px) scale(1.15); } }
+    @keyframes orb3 { to { transform: translate(-60px, -50px) scale(1.25); } }
+    @keyframes orb4 { to { transform: translate(-40px, 60px) scale(0.9); } }
 
-    /* ===== NOISE TEXTURE ===== */
+    /* ===== NOISE ===== */
     .noise {
       position: fixed; inset: 0; z-index: 1;
-      opacity: 0.025; pointer-events: none;
+      opacity: 0.03; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       background-size: 200px;
     }
@@ -103,98 +79,66 @@
       position: fixed; inset: 0; z-index: 1;
       pointer-events: none; overflow: hidden;
     }
-
     .geo {
-      position: absolute;
-      border: 1px solid rgba(168, 85, 247, 0.08);
-      opacity: 0;
-      animation: geoFadeIn 2s ease forwards, geoSpin var(--dur) linear infinite;
+      position: absolute; border: 1px solid rgba(168,85,247,0.06);
+      opacity: 0; animation: geoIn 2s ease forwards, geoSpin var(--dur) linear infinite;
     }
-
     .geo--hex {
-      width: var(--s); height: var(--s);
       clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-      border: none;
-      background: rgba(168, 85, 247, 0.03);
+      border: none; background: rgba(168,85,247,0.025);
     }
-
-    .geo--diamond {
-      width: var(--s); height: var(--s);
-      transform: rotate(45deg);
-      border-color: rgba(244, 114, 182, 0.06);
-      background: transparent;
-    }
-
-    .geo--ring {
-      width: var(--s); height: var(--s);
-      border-radius: 50%;
-      border-color: rgba(96, 165, 250, 0.06);
-      background: transparent;
-    }
-
-    @keyframes geoFadeIn { to { opacity: 1; } }
+    .geo--diamond { transform: rotate(45deg); border-color: rgba(244,114,182,0.05); }
+    .geo--ring { border-radius: 50%; border-color: rgba(96,165,250,0.05); }
+    @keyframes geoIn { to { opacity: 1; } }
     @keyframes geoSpin { to { transform: rotate(360deg); } }
 
-    /* ===== CANVAS PARTICLES (two layers) ===== */
-    #particlesFar, #particlesNear {
+    /* ===== CANVAS ===== */
+    #canvasLayer {
       position: fixed; inset: 0;
-      pointer-events: none;
+      pointer-events: none; z-index: 2;
     }
-    #particlesFar { z-index: 2; }
-    #particlesNear { z-index: 3; }
 
     /* ===== SPARKLES ===== */
     .sparkle-container {
       position: fixed; inset: 0;
       pointer-events: none; z-index: 2; overflow: hidden;
     }
-
     .sparkle {
       position: absolute; border-radius: 50%;
       animation: twinkle var(--dur) ease-in-out infinite;
       opacity: 0;
     }
-
-    .sparkle--w { background: rgba(255,255,255,0.9); box-shadow: 0 0 5px 1px rgba(255,255,255,0.25); }
-    .sparkle--v { background: rgba(168,85,247,0.7); box-shadow: 0 0 5px 1px rgba(168,85,247,0.25); }
-    .sparkle--r { background: rgba(244,114,182,0.6); box-shadow: 0 0 5px 1px rgba(244,114,182,0.25); }
-
+    .sp-w { background: rgba(255,255,255,0.9); box-shadow: 0 0 5px 1px rgba(255,255,255,0.2); }
+    .sp-v { background: rgba(168,85,247,0.7); box-shadow: 0 0 5px 1px rgba(168,85,247,0.2); }
+    .sp-r { background: rgba(244,114,182,0.6); box-shadow: 0 0 5px 1px rgba(244,114,182,0.2); }
     @keyframes twinkle {
       0%, 100% { opacity: 0; transform: scale(0); }
-      50% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1); }
     }
 
     /* ===== CURSOR ===== */
     .cursor-glow {
-      position: fixed; width: 260px; height: 260px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(168,85,247,0.07) 0%, transparent 70%);
-      pointer-events: none; z-index: 50;
-      transform: translate(-50%, -50%);
+      position: fixed; width: 280px; height: 280px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 50; transform: translate(-50%, -50%);
     }
-
     .cursor-dot {
-      position: fixed; width: 8px; height: 8px;
-      border-radius: 50%; background: rgba(255,255,255,0.9);
-      pointer-events: none; z-index: 100;
-      transform: translate(-50%, -50%);
+      position: fixed; width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      pointer-events: none; z-index: 100; transform: translate(-50%, -50%);
       box-shadow: 0 0 12px 2px rgba(255,255,255,0.2);
       transition: width 0.15s, height 0.15s, background 0.15s;
     }
-
     .cursor-dot.clicking {
       width: 16px; height: 16px;
       background: rgba(168,85,247,0.8);
       box-shadow: 0 0 20px 4px rgba(168,85,247,0.3);
     }
-
     .cursor-spark {
-      position: fixed; pointer-events: none; z-index: 99;
-      border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 99; border-radius: 50%;
       background: rgba(255,255,255,0.7);
       animation: sparkFade 0.6s ease-out forwards;
     }
-
     @keyframes sparkFade {
       0% { opacity: 1; transform: scale(1); }
       100% { opacity: 0; transform: scale(0) translateY(-12px); }
@@ -203,248 +147,204 @@
     /* ===== CLICK RIPPLE ===== */
     .ripple {
       position: fixed; pointer-events: none; z-index: 49;
-      border: 1px solid rgba(168,85,247,0.4);
-      border-radius: 50%;
+      border: 1px solid rgba(168,85,247,0.4); border-radius: 50%;
       animation: rippleOut 0.8s ease-out forwards;
     }
-
     @keyframes rippleOut {
-      0% { width: 0; height: 0; opacity: 0.8; transform: translate(-50%, -50%); }
-      100% { width: 150px; height: 150px; opacity: 0; transform: translate(-50%, -50%); }
+      0% { width: 0; height: 0; opacity: 0.8; transform: translate(-50%,-50%); }
+      100% { width: 150px; height: 150px; opacity: 0; transform: translate(-50%,-50%); }
     }
 
     /* ===== GLASS CARD ===== */
     .card {
       position: relative; z-index: 10;
-      padding: 56px 72px 48px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.025);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      padding: 56px 72px 44px; border-radius: 20px;
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
       box-shadow:
-        0 0 0 1px rgba(255,255,255,0.04) inset,
-        0 30px 80px rgba(0,0,0,0.4),
-        0 0 100px rgba(168,85,247,0.04);
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 30px 80px rgba(0,0,0,0.5),
+        0 0 120px rgba(168,85,247,0.06);
       text-align: center;
-      opacity: 0;
-      transform: translateY(40px) scale(0.96);
-      animation: cardEnter 0.9s 0.3s cubic-bezier(0.23,1,0.32,1) forwards;
+      opacity: 0; transform: translateY(40px) scale(0.96);
+      animation: cardIn 0.9s 0.3s cubic-bezier(0.23,1,0.32,1) forwards;
     }
 
-    /* animated border gradient */
+    /* animated border */
     .card::before {
-      content: '';
-      position: absolute; inset: -1px;
-      border-radius: 21px;
-      padding: 1px;
-      background: conic-gradient(from var(--border-angle), transparent 60%, rgba(168,85,247,0.4), rgba(244,114,182,0.4), rgba(96,165,250,0.3), transparent 100%);
+      content: ''; position: absolute; inset: -1px; border-radius: 21px; padding: 1px;
+      background: conic-gradient(from var(--border-angle), transparent 55%, rgba(168,85,247,0.5), rgba(244,114,182,0.5), rgba(96,165,250,0.4), transparent 100%);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      animation: borderSpin 4s linear infinite;
-      pointer-events: none;
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      animation: borderSpin 4s linear infinite; pointer-events: none;
     }
 
-    @property --border-angle {
-      syntax: '<angle>';
-      inherits: false;
-      initial-value: 0deg;
-    }
-
-    @keyframes borderSpin {
-      to { --border-angle: 360deg; }
-    }
+    @keyframes borderSpin { to { --border-angle: 360deg; } }
 
     /* glow line top */
     .card::after {
-      content: '';
-      position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(168,85,247,0.5), rgba(244,114,182,0.5), transparent);
+      content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(168,85,247,0.6), rgba(244,114,182,0.6), transparent);
       animation: glowPulse 3s ease-in-out infinite;
     }
-
     @keyframes glowPulse {
       0%, 100% { opacity: 0.3; left: 20%; right: 20%; }
       50% { opacity: 1; left: 8%; right: 8%; }
     }
+    @keyframes cardIn { to { opacity: 1; transform: translateY(0) scale(1); } }
 
-    @keyframes cardEnter {
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    /* ===== GLOW BEHIND CARD ===== */
+    .card-glow {
+      position: absolute; z-index: 9;
+      width: 500px; height: 300px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(168,85,247,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: cardGlowPulse 5s ease-in-out infinite;
+    }
+    @keyframes cardGlowPulse {
+      0%, 100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%,-50%) scale(1.15); }
     }
 
     /* ===== BONJOUR YOUSRA ===== */
     .greeting {
       font-family: 'Sora', sans-serif;
-      font-size: clamp(3rem, 10vw, 6.5rem);
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      line-height: 1;
-      color: #f1f5f9;
-      position: relative;
+      font-size: clamp(3.2rem, 10vw, 6rem);
+      font-weight: 800; letter-spacing: -1px; line-height: 1;
     }
 
-    .greeting .word {
-      display: block;
-    }
-
-    .greeting .word--name {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.55em;
-      font-weight: 700;
-      font-style: italic;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, #c4b5fd, #f9a8d4, #93c5fd);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-top: 4px;
-    }
-
-    .greeting .letter {
-      display: inline-block;
-      opacity: 0;
-      animation: letterReveal 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    .word--main {
+      display: block; color: #f1f5f9;
       text-shadow: 0 0 40px rgba(168,85,247,0.3), 0 0 80px rgba(168,85,247,0.1);
-      transition: text-shadow 0.3s ease, transform 0.3s ease;
     }
 
-    .greeting .letter:hover {
-      text-shadow: 0 0 20px rgba(168,85,247,0.6), 0 0 60px rgba(244,114,182,0.3);
-      transform: translateY(-3px) scale(1.05);
+    .word--name {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.5em; font-weight: 500; font-style: italic;
+      letter-spacing: 2px; margin-top: 6px;
+      color: #c4b5fd;
+      text-shadow: 0 0 30px rgba(196,181,253,0.4), 0 0 60px rgba(196,181,253,0.15);
     }
 
-    /* stagger delays — B(0) o(1) n(2) j(3) o(4) u(5) r(6) then Y(7) o(8) u(9) s(10) r(11) a(12) */
-    .greeting .letter:nth-child(1) { animation-delay: 0.5s; }
-    .greeting .letter:nth-child(2) { animation-delay: 0.6s; }
-    .greeting .letter:nth-child(3) { animation-delay: 0.7s; }
-    .greeting .letter:nth-child(4) { animation-delay: 0.8s; }
-    .greeting .letter:nth-child(5) { animation-delay: 0.9s; }
-    .greeting .letter:nth-child(6) { animation-delay: 1.0s; }
-    .greeting .letter:nth-child(7) { animation-delay: 1.1s; }
-    .greeting .letter:nth-child(8) { animation-delay: 1.4s; }
-    .greeting .letter:nth-child(9) { animation-delay: 1.5s; }
-    .greeting .letter:nth-child(10) { animation-delay: 1.6s; }
-    .greeting .letter:nth-child(11) { animation-delay: 1.7s; }
-    .greeting .letter:nth-child(12) { animation-delay: 1.8s; }
-    .greeting .letter:nth-child(13) { animation-delay: 1.9s; }
+    .letter {
+      display: inline-block; opacity: 0;
+      animation: letterIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
+      transition: text-shadow 0.3s, transform 0.3s;
+    }
+    .letter:hover {
+      text-shadow: 0 0 20px rgba(168,85,247,0.7), 0 0 50px rgba(244,114,182,0.3) !important;
+      transform: translateY(-4px) scale(1.08);
+    }
 
-    @keyframes letterReveal {
-      0% { opacity: 0; transform: translateY(20px); filter: blur(6px); }
-      100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+    @keyframes letterIn {
+      0% { opacity: 0; transform: translateY(18px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     /* ===== SOUND WAVE BARS ===== */
     .wave-bars {
       display: flex; justify-content: center; gap: 3px;
-      margin-top: 20px; height: 20px; align-items: flex-end;
-      opacity: 0;
-      animation: fadeIn 0.5s 2.2s ease forwards;
+      margin-top: 18px; height: 20px; align-items: flex-end;
+      opacity: 0; animation: fadeIn 0.5s 2.2s ease forwards;
     }
-
     .wave-bar {
       width: 3px; border-radius: 2px;
-      background: linear-gradient(to top, rgba(168,85,247,0.5), rgba(244,114,182,0.5));
-      animation: waveAnim var(--dur) ease-in-out infinite alternate;
+      background: linear-gradient(to top, rgba(168,85,247,0.4), rgba(244,114,182,0.4));
+      animation: wave var(--dur) ease-in-out infinite alternate;
+    }
+    @keyframes wave { 0% { height: 3px; } 100% { height: var(--h); } }
+
+    /* ===== EMOJI HEARTS ===== */
+    .hearts-row {
+      display: flex; justify-content: center; gap: 8px;
+      margin-top: 20px;
+      opacity: 0; animation: fadeIn 0.5s 2.4s ease forwards;
     }
 
-    @keyframes waveAnim {
-      0% { height: 4px; }
-      100% { height: var(--h); }
-    }
-
-    /* ===== CSS HEARTS ===== */
-    .hearts-container {
-      display: flex; justify-content: center; gap: 20px;
-      margin-top: 24px;
-      opacity: 0;
-      animation: fadeIn 0.5s 2.4s ease forwards;
-    }
-
-    .css-heart {
-      position: relative;
-      width: 28px; height: 25px;
+    .heart {
+      font-size: 2rem; display: inline-block;
+      animation: heartBob 2.5s ease-in-out infinite;
       cursor: none;
-      animation: heartFloat 3s ease-in-out infinite;
-      transition: filter 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s;
+      filter: drop-shadow(0 0 6px var(--glow));
+    }
+    .heart:hover {
+      transform: scale(1.6) rotate(10deg) !important;
+      filter: drop-shadow(0 0 16px var(--glow)) brightness(1.2);
     }
 
-    .css-heart:hover {
-      filter: drop-shadow(0 0 10px var(--glow));
-      animation-play-state: paused;
+    @keyframes heartBob {
+      0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+      30% { transform: translateY(-6px) scale(1.1) rotate(-3deg); }
+      60% { transform: translateY(-2px) scale(1.04) rotate(2deg); }
     }
 
-    .css-heart:hover .css-heart__left,
-    .css-heart:hover .css-heart__right {
-      transform: scale(1.2);
+    .heart:nth-child(1) { animation-delay: 0s; --glow: rgba(167,139,250,0.5); }
+    .heart:nth-child(2) { animation-delay: 0.2s; --glow: rgba(244,114,182,0.5); }
+    .heart:nth-child(3) { animation-delay: 0.4s; --glow: rgba(255,255,255,0.4); }
+    .heart:nth-child(4) { animation-delay: 0.2s; --glow: rgba(244,114,182,0.5); }
+    .heart:nth-child(5) { animation-delay: 0s; --glow: rgba(167,139,250,0.5); }
+
+    /* ===== AUDIO BUTTON ===== */
+    .audio-btn {
+      position: fixed; bottom: 24px; right: 24px; z-index: 60;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: rgba(255,255,255,0.7);
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+      opacity: 0; animation: fadeIn 0.5s 3s ease forwards;
+    }
+    .audio-btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(168,85,247,0.4);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(168,85,247,0.15);
+    }
+    .audio-btn .bars {
+      display: flex; gap: 2px; align-items: flex-end; height: 16px;
+    }
+    .audio-btn .bar {
+      width: 3px; background: currentColor; border-radius: 1px;
+      transition: height 0.3s;
+    }
+    .audio-btn.playing .bar { animation: audioBar 0.8s ease-in-out infinite alternate; }
+    .audio-btn .bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+    .audio-btn .bar:nth-child(2) { height: 10px; animation-delay: 0.15s; }
+    .audio-btn .bar:nth-child(3) { height: 4px; animation-delay: 0.3s; }
+    .audio-btn .bar:nth-child(4) { height: 8px; animation-delay: 0.1s; }
+    .audio-btn:not(.playing) .bar { height: 3px !important; animation: none; }
+
+    @keyframes audioBar {
+      0% { height: 3px; }
+      100% { height: var(--max-h, 14px); }
     }
 
-    .css-heart__left, .css-heart__right {
-      position: absolute; top: 0;
-      width: 14px; height: 22px;
-      border-radius: 14px 14px 0 0;
-      background: var(--bg);
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    }
-
-    .css-heart__left {
-      left: 14px;
-      transform: rotate(-45deg);
-      transform-origin: 0 100%;
-    }
-
-    .css-heart__right {
-      left: 0;
-      transform: rotate(45deg);
-      transform-origin: 100% 100%;
-    }
-
-    .css-heart::after {
-      content: '';
-      position: absolute; top: -2px; left: 50%;
-      transform: translateX(-50%);
-      width: 6px; height: 6px;
-      background: rgba(255,255,255,0.5);
-      border-radius: 50%;
-      filter: blur(2px);
-    }
-
-    @keyframes heartFloat {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-5px) scale(1.08); }
-    }
-
-    .css-heart:nth-child(1) { animation-delay: 0s; --bg: #a78bfa; --glow: rgba(167,139,250,0.5); }
-    .css-heart:nth-child(2) { animation-delay: 0.4s; --bg: #f472b6; --glow: rgba(244,114,182,0.5); }
-    .css-heart:nth-child(3) { animation-delay: 0.8s; --bg: #c4b5fd; --glow: rgba(196,181,253,0.5); }
-    .css-heart:nth-child(4) { animation-delay: 0.4s; --bg: #f472b6; --glow: rgba(244,114,182,0.5); }
-    .css-heart:nth-child(5) { animation-delay: 0s; --bg: #a78bfa; --glow: rgba(167,139,250,0.5); }
+    @keyframes fadeIn { to { opacity: 1; } }
 
     /* ===== CLICK BURST ===== */
     .click-burst {
       position: fixed; pointer-events: none; z-index: 200;
-      font-size: 1rem;
       animation: burstUp 0.9s ease-out forwards;
     }
-
     @keyframes burstUp {
       0% { opacity: 1; transform: translate(0,0) scale(1) rotate(0deg); }
       100% { opacity: 0; transform: translate(var(--tx),var(--ty)) scale(0.1) rotate(var(--rot)); }
     }
 
-    /* ===== FADE IN UTILITY ===== */
-    @keyframes fadeIn { to { opacity: 1; } }
-
-    /* ===== MOBILE ===== */
     @media (hover: none) {
       body { cursor: auto; }
       .cursor-glow, .cursor-dot { display: none; }
-      .css-heart { cursor: pointer; }
+      .heart { cursor: pointer; }
     }
-
     @media (max-width: 600px) {
-      .card { padding: 40px 28px 36px; border-radius: 16px; }
-      .greeting .word--name { font-size: 0.5em; }
+      .card { padding: 40px 28px 32px; border-radius: 16px; }
     }
   </style>
 </head>
@@ -459,12 +359,11 @@
   </div>
   <div class="noise"></div>
 
-  <!-- Geometric shapes -->
-  <div class="geo-container" id="geoContainer"></div>
+  <!-- Geometric -->
+  <div class="geo-container" id="geoBox"></div>
 
-  <!-- Particles -->
-  <canvas id="particlesFar"></canvas>
-  <canvas id="particlesNear"></canvas>
+  <!-- Canvas (hearts + petals + particles) -->
+  <canvas id="canvasLayer"></canvas>
 
   <!-- Sparkles -->
   <div class="sparkle-container" id="sparkles"></div>
@@ -473,31 +372,76 @@
   <div class="cursor-glow" id="cursorGlow"></div>
   <div class="cursor-dot" id="cursorDot"></div>
 
+  <!-- Card glow -->
+  <div class="card-glow"></div>
+
   <!-- Card -->
   <div class="card" id="card">
     <div class="greeting">
-      <div class="word word--main">
+      <div class="word--main">
         <span class="letter">B</span><span class="letter">o</span><span class="letter">n</span><span class="letter">j</span><span class="letter">o</span><span class="letter">u</span><span class="letter">r</span>
       </div>
-      <div class="word word--name">
+      <div class="word--name">
         <span class="letter">Y</span><span class="letter">o</span><span class="letter">u</span><span class="letter">s</span><span class="letter">r</span><span class="letter">a</span>
       </div>
     </div>
 
-    <!-- Sound wave bars -->
     <div class="wave-bars" id="waveBars"></div>
 
-    <!-- CSS Hearts -->
-    <div class="hearts-container">
-      <div class="css-heart"><div class="css-heart__left"></div><div class="css-heart__right"></div></div>
-      <div class="css-heart"><div class="css-heart__left"></div><div class="css-heart__right"></div></div>
-      <div class="css-heart"><div class="css-heart__left"></div><div class="css-heart__right"></div></div>
-      <div class="css-heart"><div class="css-heart__left"></div><div class="css-heart__right"></div></div>
-      <div class="css-heart"><div class="css-heart__left"></div><div class="css-heart__right"></div></div>
+    <div class="hearts-row">
+      <span class="heart">💜</span>
+      <span class="heart">🩷</span>
+      <span class="heart">🤍</span>
+      <span class="heart">🩷</span>
+      <span class="heart">💜</span>
     </div>
   </div>
 
+  <!-- Audio -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/6/67/Clair_de_Lune_by_Claude_Debussy_%281905%2C_piano_solo%29.opus/Clair_de_Lune_by_Claude_Debussy_%281905%2C_piano_solo%29.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="audio-btn" id="audioBtn" title="Toggle music">
+    <div class="bars">
+      <div class="bar" style="--max-h:14px"></div>
+      <div class="bar" style="--max-h:10px"></div>
+      <div class="bar" style="--max-h:16px"></div>
+      <div class="bar" style="--max-h:8px"></div>
+    </div>
+  </button>
+
   <script>
+    // ========================================
+    // AUDIO
+    // ========================================
+    const audio = document.getElementById('bgMusic');
+    const audioBtn = document.getElementById('audioBtn');
+    let audioPlaying = false;
+
+    audioBtn.addEventListener('click', () => {
+      if (audioPlaying) {
+        audio.pause();
+        audioBtn.classList.remove('playing');
+      } else {
+        audio.volume = 0.35;
+        audio.play().then(() => audioBtn.classList.add('playing')).catch(() => {});
+      }
+      audioPlaying = !audioPlaying;
+    });
+
+    // auto-play on first interaction
+    document.addEventListener('click', function autoPlay() {
+      if (!audioPlaying) {
+        audio.volume = 0.35;
+        audio.play().then(() => {
+          audioPlaying = true;
+          audioBtn.classList.add('playing');
+        }).catch(() => {});
+      }
+      document.removeEventListener('click', autoPlay);
+    }, { once: true });
+
     // ========================================
     // CURSOR
     // ========================================
@@ -509,10 +453,8 @@
     document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
     (function tick() {
-      gx += (mx - gx) * 0.07;
-      gy += (my - gy) * 0.07;
-      dx += (mx - dx) * 0.2;
-      dy += (my - dy) * 0.2;
+      gx += (mx - gx) * 0.07; gy += (my - gy) * 0.07;
+      dx += (mx - dx) * 0.2; dy += (my - dy) * 0.2;
       glowEl.style.left = gx + 'px'; glowEl.style.top = gy + 'px';
       dotEl.style.left = dx + 'px'; dotEl.style.top = dy + 'px';
       requestAnimationFrame(tick);
@@ -521,7 +463,7 @@
     document.addEventListener('mousedown', () => dotEl.classList.add('clicking'));
     document.addEventListener('mouseup', () => dotEl.classList.remove('clicking'));
 
-    // ===== SPARK TRAIL =====
+    // spark trail
     let fc = 0;
     document.addEventListener('mousemove', e => {
       if (++fc % 4 !== 0) return;
@@ -529,37 +471,36 @@
       s.className = 'cursor-spark';
       const sz = 2 + Math.random() * 3;
       Object.assign(s.style, {
-        width: sz + 'px', height: sz + 'px',
-        left: (e.clientX + (Math.random() - 0.5) * 8) + 'px',
-        top: (e.clientY + (Math.random() - 0.5) * 8) + 'px'
+        width: sz+'px', height: sz+'px',
+        left: (e.clientX + (Math.random()-0.5)*8)+'px',
+        top: (e.clientY + (Math.random()-0.5)*8)+'px'
       });
       document.body.appendChild(s);
       s.addEventListener('animationend', () => s.remove());
     });
 
-    // ===== CLICK RIPPLE =====
+    // click ripple
     document.addEventListener('click', e => {
       const r = document.createElement('div');
       r.className = 'ripple';
-      r.style.left = e.clientX + 'px';
-      r.style.top = e.clientY + 'px';
+      r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
       document.body.appendChild(r);
       r.addEventListener('animationend', () => r.remove());
     });
 
     // ========================================
-    // 3D TILT ON CARD
+    // 3D TILT
     // ========================================
     const card = document.getElementById('card');
     document.addEventListener('mousemove', e => {
-      const cx = innerWidth / 2, cy = innerHeight / 2;
+      const cx = innerWidth/2, cy = innerHeight/2;
       const rx = ((e.clientY - cy) / cy) * -3;
       const ry = ((e.clientX - cx) / cx) * 3;
       card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
     });
 
     // ========================================
-    // SOUND WAVE BARS
+    // WAVE BARS
     // ========================================
     const waveBox = document.getElementById('waveBars');
     for (let i = 0; i < 20; i++) {
@@ -574,93 +515,109 @@
     // ========================================
     // GEOMETRIC SHAPES
     // ========================================
-    const geoBox = document.getElementById('geoContainer');
+    const geoBox = document.getElementById('geoBox');
     const geoTypes = ['geo--hex', 'geo--diamond', 'geo--ring'];
     for (let i = 0; i < 10; i++) {
       const g = document.createElement('div');
       g.className = 'geo ' + geoTypes[i % 3];
       const s = 30 + Math.random() * 80;
-      g.style.setProperty('--s', s + 'px');
-      g.style.setProperty('--dur', (20 + Math.random() * 30) + 's');
-      g.style.left = Math.random() * 100 + '%';
-      g.style.top = Math.random() * 100 + '%';
-      g.style.animationDelay = (Math.random() * 3) + 's, ' + (Math.random() * 10) + 's';
-      g.style.opacity = '0';
+      g.style.cssText = `--s:${s}px;--dur:${20+Math.random()*30}s;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s,${Math.random()*10}s;opacity:0`;
       geoBox.appendChild(g);
     }
 
     // ========================================
-    // CANVAS PARTICLES — FAR LAYER
+    // CANVAS — HEARTS + PETALS + PARTICLES
     // ========================================
-    const cFar = document.getElementById('particlesFar');
-    const ctxFar = cFar.getContext('2d');
-    const cNear = document.getElementById('particlesNear');
-    const ctxNear = cNear.getContext('2d');
+    const canvas = document.getElementById('canvasLayer');
+    const ctx = canvas.getContext('2d');
     let W, H;
 
-    function resize() {
-      W = cFar.width = cNear.width = innerWidth;
-      H = cFar.height = cNear.height = innerHeight;
-    }
+    function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
     resize();
     addEventListener('resize', resize);
 
-    const farParticles = [];
-    const nearParticles = [];
-    const dotSymbols = ['·', '◦', '•'];
+    const heartSyms = ['♥', '♡', '💗', '💖'];
+    const petalSyms = ['🌸', '🌷', '✿', '❀', '🌹', '🌺'];
+    const dotSym = ['·', '•'];
 
-    function makeP(layer, init) {
-      const isFar = layer === 'far';
+    const items = [];
+
+    function makeItem(type, init) {
+      const isHeart = type === 'heart';
+      const isPetal = type === 'petal';
       return {
+        type,
         x: Math.random() * W,
-        y: init ? Math.random() * H : H + 10,
-        size: isFar ? (0.8 + Math.random() * 1.2) : (1.5 + Math.random() * 2),
-        speedY: isFar ? -(0.03 + Math.random() * 0.1) : -(0.08 + Math.random() * 0.25),
-        speedX: (Math.random() - 0.5) * (isFar ? 0.05 : 0.12),
-        opacity: isFar ? (0.05 + Math.random() * 0.15) : (0.15 + Math.random() * 0.35),
+        y: init ? Math.random() * H : (isHeart ? H + 30 : isPetal ? -30 : H + 10),
+        size: isHeart ? (18 + Math.random() * 14) : isPetal ? (20 + Math.random() * 16) : (1 + Math.random() * 2),
+        speedY: isHeart ? -(0.15 + Math.random() * 0.4) : isPetal ? (0.12 + Math.random() * 0.35) : -(0.05 + Math.random() * 0.15),
+        speedX: (Math.random() - 0.5) * (isHeart || isPetal ? 0.3 : 0.1),
+        opacity: isHeart ? (0.25 + Math.random() * 0.35) : isPetal ? (0.2 + Math.random() * 0.35) : (0.1 + Math.random() * 0.2),
         wobble: Math.random() * Math.PI * 2,
-        wSpeed: 0.003 + Math.random() * 0.008,
-        color: isFar
-          ? `rgba(168,85,247,${0.2 + Math.random() * 0.3})`
-          : '#fff'
+        wSpeed: 0.005 + Math.random() * 0.012,
+        wAmp: 0.2 + Math.random() * 0.4,
+        rot: Math.random() * 360,
+        rSpeed: (Math.random() - 0.5) * 0.8,
+        symbol: isHeart
+          ? heartSyms[Math.floor(Math.random() * heartSyms.length)]
+          : isPetal
+            ? petalSyms[Math.floor(Math.random() * petalSyms.length)]
+            : dotSym[Math.floor(Math.random() * dotSym.length)],
+        color: (!isHeart && !isPetal)
+          ? `rgba(168,85,247,${0.3 + Math.random() * 0.4})`
+          : null
       };
     }
 
-    for (let i = 0; i < 40; i++) farParticles.push(makeP('far', true));
-    for (let i = 0; i < 35; i++) nearParticles.push(makeP('near', true));
+    for (let i = 0; i < 12; i++) items.push(makeItem('heart', true));
+    for (let i = 0; i < 15; i++) items.push(makeItem('petal', true));
+    for (let i = 0; i < 50; i++) items.push(makeItem('dot', true));
 
-    function drawLayer(ctx, arr, layer) {
-      ctx.clearRect(0, 0, W, H);
-      for (const p of arr) {
-        p.wobble += p.wSpeed;
-        p.x += p.speedX + Math.sin(p.wobble) * (layer === 'far' ? 0.08 : 0.15);
-        p.y += p.speedY;
-        if (p.y < -20) Object.assign(p, makeP(layer, false));
-        ctx.save();
-        ctx.globalAlpha = p.opacity;
+    function updateItem(p) {
+      p.wobble += p.wSpeed;
+      p.x += p.speedX + Math.sin(p.wobble) * p.wAmp;
+      p.y += p.speedY;
+      p.rot += p.rSpeed;
+
+      if (p.type === 'heart' && p.y < -40) Object.assign(p, makeItem('heart', false));
+      if (p.type === 'petal' && p.y > H + 40) Object.assign(p, makeItem('petal', false));
+      if (p.type === 'dot' && p.y < -20) Object.assign(p, makeItem('dot', false));
+    }
+
+    function drawItem(p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = p.opacity;
+      if (p.color) {
         ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
         ctx.fill();
-        ctx.restore();
+      } else {
+        ctx.font = p.size + 'px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(p.symbol, 0, 0);
       }
+      ctx.restore();
     }
 
-    function animLoop() {
-      drawLayer(ctxFar, farParticles, 'far');
-      drawLayer(ctxNear, nearParticles, 'near');
-      requestAnimationFrame(animLoop);
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of items) { updateItem(p); drawItem(p); }
+      requestAnimationFrame(loop);
     }
-    animLoop();
+    loop();
 
     // ========================================
     // SPARKLES
     // ========================================
     const sparkleBox = document.getElementById('sparkles');
-    const sparkleClasses = ['sparkle--w', 'sparkle--v', 'sparkle--r'];
-    for (let i = 0; i < 50; i++) {
+    const spClasses = ['sp-w', 'sp-v', 'sp-r'];
+    for (let i = 0; i < 60; i++) {
       const s = document.createElement('div');
-      s.className = 'sparkle ' + sparkleClasses[Math.floor(Math.random() * 3)];
+      s.className = 'sparkle ' + spClasses[Math.floor(Math.random() * 3)];
       s.style.left = Math.random() * 100 + '%';
       s.style.top = Math.random() * 100 + '%';
       s.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
@@ -671,23 +628,24 @@
     }
 
     // ========================================
-    // CLICK BURST (upgraded)
+    // CLICK BURST
     // ========================================
-    const burstSyms = ['✦', '✧', '♡', '·', '◦'];
+    const burstSyms = ['✦', '✧', '♡', '💜', '🩷', '🤍', '·'];
+    const burstColors = ['#a78bfa', '#f472b6', '#c4b5fd', '#fff', '#f9a8d4'];
     document.addEventListener('click', e => {
-      for (let i = 0; i < 16; i++) {
+      for (let i = 0; i < 18; i++) {
         const el = document.createElement('span');
         el.className = 'click-burst';
         el.textContent = burstSyms[Math.floor(Math.random() * burstSyms.length)];
         el.style.left = e.clientX + 'px';
         el.style.top = e.clientY + 'px';
-        const angle = (Math.PI * 2 / 16) * i + (Math.random() - 0.5) * 0.4;
-        const dist = 50 + Math.random() * 70;
+        const angle = (Math.PI * 2 / 18) * i + (Math.random() - 0.5) * 0.4;
+        const dist = 50 + Math.random() * 80;
         el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
         el.style.setProperty('--ty', Math.sin(angle) * dist - 20 + 'px');
         el.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
-        el.style.fontSize = (0.7 + Math.random() * 0.5) + 'rem';
-        el.style.color = ['#a78bfa', '#f472b6', '#93c5fd', '#fff'][Math.floor(Math.random() * 4)];
+        el.style.fontSize = (0.8 + Math.random() * 0.6) + 'rem';
+        el.style.color = burstColors[Math.floor(Math.random() * burstColors.length)];
         document.body.appendChild(el);
         el.addEventListener('animationend', () => el.remove());
       }
