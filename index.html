@@ -6,116 +6,124 @@
   <title>Bonjour Yousra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       min-height: 100vh; overflow: hidden;
       font-family: 'Playfair Display', serif;
-      background: linear-gradient(180deg, #fef9f3 0%, #fdf0e8 40%, #fde8e0 70%, #fdf2f8 100%);
+      background: #0a0a0f;
       display: flex; align-items: center; justify-content: center;
       position: relative; cursor: default;
     }
 
-    /* ===== THREE.JS CANVAS ===== */
-    #three-canvas {
-      position: fixed; inset: 0; z-index: 0;
-      pointer-events: none;
+    /* ===== BACKGROUND GLOW ===== */
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(212,168,83,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 40% 45%, rgba(201,112,90,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 35% at 60% 55%, rgba(184,134,11,0.04) 0%, transparent 50%);
+    }
+
+    /* ===== GLOW ORBS ===== */
+    .orb {
+      position: fixed; border-radius: 50%; pointer-events: none;
+      filter: blur(80px); z-index: 1;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .orb--1 { width: 400px; height: 400px; background: rgba(212,168,83,0.07); top: 30%; left: 35%; }
+    .orb--2 { width: 300px; height: 300px; background: rgba(201,112,90,0.06); top: 45%; right: 30%; }
+    .orb--3 { width: 250px; height: 250px; background: rgba(184,134,11,0.05); bottom: 25%; left: 45%; }
+
+    /* ===== CANVAS ===== */
+    #heartsCanvas {
+      position: fixed; inset: 0; z-index: 2; pointer-events: none;
     }
 
     /* ===== SPARKLES ===== */
-    .sparkles {
-      position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
-    }
+    .sparkles { position: fixed; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
     .sparkle {
       position: absolute; border-radius: 50%; opacity: 0;
       animation: twinkle var(--dur) ease-in-out infinite;
       animation-delay: var(--delay);
     }
-    .sp-gold { background: #d4a853; box-shadow: 0 0 4px 1px rgba(212,168,83,0.3); }
-    .sp-rose { background: #e8a0b4; box-shadow: 0 0 4px 1px rgba(232,160,180,0.3); }
-    .sp-white { background: #fff; box-shadow: 0 0 4px 1px rgba(255,255,255,0.4); }
+    .sp-g { background: #d4a853; box-shadow: 0 0 6px 2px rgba(212,168,83,0.3); }
+    .sp-r { background: #c9705a; box-shadow: 0 0 6px 2px rgba(201,112,90,0.25); }
+    .sp-w { background: #fff; box-shadow: 0 0 6px 2px rgba(255,255,255,0.2); }
     @keyframes twinkle {
       0%, 100% { opacity: 0; transform: scale(0); }
-      50% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1); }
     }
 
-    /* ===== CARD ===== */
-    .card-wrap {
-      position: relative; z-index: 10;
-      opacity: 0; transform: scale(0.92);
+    /* ===== TEXT CONTAINER ===== */
+    .text-wrap {
+      position: relative; z-index: 10; text-align: center;
+      opacity: 0; transform: translateY(30px);
     }
-    .card {
-      padding: 60px 80px 50px; border-radius: 28px;
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      box-shadow:
-        0 0 0 1px rgba(212,168,83,0.12),
-        0 20px 60px rgba(180,120,90,0.1),
-        0 4px 16px rgba(180,120,90,0.06),
-        0 0 100px rgba(200,160,140,0.08);
-      text-align: center;
-      position: relative;
-    }
-    .card::before {
-      content: ''; position: absolute; inset: -1px; border-radius: 29px; padding: 1px;
-      background: linear-gradient(135deg, rgba(212,168,83,0.3), rgba(201,112,90,0.2), rgba(212,168,83,0.1), transparent);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
-      pointer-events: none;
-    }
-
-    /* ===== TEXT ===== */
-    .greeting { line-height: 1.1; }
+    .greeting { line-height: 1.05; }
     .word--main {
       display: block;
-      font-size: clamp(3rem, 9vw, 5.5rem);
-      font-weight: 600; letter-spacing: -0.5px;
-      color: #b8860b;
-      text-shadow: 0 2px 20px rgba(184,134,11,0.15);
+      font-size: clamp(3.5rem, 11vw, 7.5rem);
+      font-weight: 700; letter-spacing: -1px;
+      color: #f5f0e8;
+      text-shadow:
+        0 0 40px rgba(212,168,83,0.2),
+        0 0 80px rgba(212,168,83,0.08),
+        0 2px 30px rgba(0,0,0,0.5);
     }
     .word--name {
       display: block;
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-size: clamp(2rem, 6.5vw, 4.5rem);
       font-weight: 300; font-style: italic;
-      letter-spacing: 3px; margin-top: 4px;
-      color: #c9705a;
-      text-shadow: 0 2px 16px rgba(201,112,90,0.12);
+      letter-spacing: 6px; margin-top: 2px;
+      color: #d4a853;
+      text-shadow:
+        0 0 30px rgba(212,168,83,0.3),
+        0 0 60px rgba(212,168,83,0.1),
+        0 2px 20px rgba(0,0,0,0.4);
     }
     .letter {
       display: inline-block; opacity: 0;
-      transition: color 0.3s, text-shadow 0.3s;
+      transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+    }
+    .letter.revealed {
+      animation: letterIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
     .letter:hover {
       color: #d4a853 !important;
-      text-shadow: 0 0 24px rgba(212,168,83,0.35) !important;
+      text-shadow: 0 0 30px rgba(212,168,83,0.5) !important;
+      transform: translateY(-3px) !important;
     }
-    .letter.revealed {
-      animation: letterUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    @keyframes letterIn {
+      0% { opacity: 0; transform: translateY(25px) scale(0.9); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
-    @keyframes letterUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+
+    /* ===== DIVIDER LINE ===== */
+    .divider {
+      width: 0; height: 1px; margin: 12px auto 0;
+      background: linear-gradient(90deg, transparent, rgba(212,168,83,0.4), rgba(201,112,90,0.3), transparent);
+      opacity: 0;
     }
 
     /* ===== HEARTS ROW ===== */
     .hearts-row {
-      display: flex; justify-content: center; gap: 18px;
-      margin-top: 28px; opacity: 0;
+      display: flex; justify-content: center; gap: 20px;
+      margin-top: 24px; opacity: 0;
     }
     .h-heart {
-      width: 18px; height: 16px; position: relative;
+      width: 14px; height: 13px; position: relative;
       animation: heartPulse 2.4s ease-in-out infinite;
     }
     .h-heart::before, .h-heart::after {
       content: ''; position: absolute; top: 0;
-      width: 11px; height: 16px; border-radius: 11px 11px 0 0;
+      width: 9px; height: 13px; border-radius: 9px 9px 0 0;
       background: var(--hc);
     }
-    .h-heart::before { left: 9px; transform: rotate(-45deg); transform-origin: 0 100%; }
+    .h-heart::before { left: 7px; transform: rotate(-45deg); transform-origin: 0 100%; }
     .h-heart::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
     .h-heart:nth-child(1) { --hc: #d4a853; animation-delay: 0s; }
     .h-heart:nth-child(2) { --hc: #c9705a; animation-delay: 0.3s; }
@@ -124,98 +132,110 @@
     .h-heart:nth-child(5) { --hc: #d4a853; animation-delay: 0s; }
     @keyframes heartPulse {
       0%, 100% { transform: scale(1) translateY(0); }
-      30% { transform: scale(1.15) translateY(-3px); }
+      30% { transform: scale(1.2) translateY(-3px); }
       60% { transform: scale(1.05) translateY(-1px); }
+    }
+
+    /* ===== SUBTITLE ===== */
+    .subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.85rem, 2vw, 1.1rem);
+      font-style: italic; font-weight: 300;
+      color: rgba(212,168,83,0.5);
+      letter-spacing: 3px; text-transform: lowercase;
+      margin-top: 20px; opacity: 0;
     }
 
     /* ===== AUDIO BTN ===== */
     .audio-btn {
-      position: fixed; bottom: 28px; right: 28px; z-index: 60;
-      width: 52px; height: 52px; border-radius: 50%;
-      background: rgba(255,255,255,0.75);
-      border: 1px solid rgba(212,168,83,0.2);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      position: fixed; bottom: 32px; right: 32px; z-index: 60;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(212,168,83,0.08);
+      border: 1px solid rgba(212,168,83,0.15);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      opacity: 0; transform: scale(0.8);
-      transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
-      box-shadow: 0 4px 20px rgba(180,120,90,0.1);
+      opacity: 0; transform: scale(0.7);
+      transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
     }
     .audio-btn:hover {
-      background: rgba(255,255,255,0.9);
-      border-color: rgba(212,168,83,0.4);
-      box-shadow: 0 4px 30px rgba(184,134,11,0.15);
+      background: rgba(212,168,83,0.15);
+      border-color: rgba(212,168,83,0.3);
+      box-shadow: 0 4px 40px rgba(212,168,83,0.1);
+      transform: scale(1.08);
     }
-    .audio-btn svg {
-      width: 20px; height: 20px; fill: #b8860b;
-      transition: fill 0.3s;
-    }
-    .audio-btn.playing svg { fill: #c9705a; }
-    .audio-btn .eq-bars {
-      display: flex; gap: 2px; align-items: flex-end; height: 16px;
-    }
+    .audio-btn .eq-bars { display: flex; gap: 2.5px; align-items: flex-end; height: 18px; }
     .audio-btn .eq-bar {
-      width: 3px; border-radius: 1.5px; background: #b8860b;
+      width: 3px; border-radius: 2px;
+      background: linear-gradient(to top, #d4a853, #c9705a);
       transition: height 0.3s;
     }
     .audio-btn.playing .eq-bar { animation: eqAnim 0.7s ease-in-out infinite alternate; }
-    .audio-btn .eq-bar:nth-child(1) { height: 5px; --mh: 14px; }
-    .audio-btn .eq-bar:nth-child(2) { height: 9px; --mh: 8px; }
-    .audio-btn .eq-bar:nth-child(3) { height: 3px; --mh: 16px; }
-    .audio-btn .eq-bar:nth-child(4) { height: 7px; --mh: 10px; }
+    .audio-btn .eq-bar:nth-child(1) { height: 5px; --mh: 15px; }
+    .audio-btn .eq-bar:nth-child(2) { height: 10px; --mh: 9px; }
+    .audio-btn .eq-bar:nth-child(3) { height: 3px; --mh: 17px; }
+    .audio-btn .eq-bar:nth-child(4) { height: 8px; --mh: 11px; }
     .audio-btn:not(.playing) .eq-bar { height: 3px !important; animation: none; }
     @keyframes eqAnim { 0% { height: 3px; } 100% { height: var(--mh); } }
-
-    /* ===== AUDIO HINT ===== */
-    .audio-hint {
-      position: fixed; bottom: 90px; right: 20px; z-index: 60;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.85rem; font-style: italic;
-      color: #c9705a; opacity: 0;
-      letter-spacing: 0.5px;
-    }
 
     /* ===== CLICK RIPPLE ===== */
     .ripple {
       position: fixed; pointer-events: none; z-index: 49;
-      border: 1.5px solid rgba(212,168,83,0.3); border-radius: 50%;
-      animation: rippleOut 0.9s ease-out forwards;
+      border: 1px solid rgba(212,168,83,0.25); border-radius: 50%;
+      animation: rippleOut 1s ease-out forwards;
     }
     @keyframes rippleOut {
-      0% { width: 0; height: 0; opacity: 0.6; transform: translate(-50%,-50%); }
-      100% { width: 120px; height: 120px; opacity: 0; transform: translate(-50%,-50%); }
+      0% { width: 0; height: 0; opacity: 0.5; transform: translate(-50%,-50%); }
+      100% { width: 140px; height: 140px; opacity: 0; transform: translate(-50%,-50%); }
+    }
+
+    /* ===== CLICK BURST ===== */
+    .burst {
+      position: fixed; pointer-events: none; z-index: 200;
+      animation: burstUp 0.8s ease-out forwards;
+    }
+    @keyframes burstUp {
+      0% { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx),var(--ty)) scale(0.2); }
     }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .card { padding: 44px 32px 36px; border-radius: 20px; }
-      .word--main { font-size: clamp(2.4rem, 10vw, 3.5rem); }
-      .word--name { font-size: clamp(1.8rem, 7vw, 2.6rem); }
-      .audio-btn { width: 56px; height: 56px; bottom: 20px; right: 20px; }
-      .audio-hint { bottom: 86px; right: 16px; }
+      .word--main { font-size: clamp(2.5rem, 12vw, 4rem); }
+      .word--name { font-size: clamp(1.6rem, 7vw, 2.8rem); letter-spacing: 3px; }
+      .audio-btn { width: 52px; height: 52px; bottom: 20px; right: 20px; }
+      .orb--1 { width: 250px; height: 250px; }
+      .orb--2 { width: 180px; height: 180px; }
+      .orb--3 { width: 150px; height: 150px; }
     }
   </style>
 </head>
 <body>
 
-  <canvas id="three-canvas"></canvas>
+  <div class="bg-glow"></div>
+  <div class="orb orb--1" id="orb1"></div>
+  <div class="orb orb--2" id="orb2"></div>
+  <div class="orb orb--3" id="orb3"></div>
+
+  <canvas id="heartsCanvas"></canvas>
 
   <div class="sparkles" id="sparkles"></div>
 
-  <div class="card-wrap" id="cardWrap">
-    <div class="card" id="card">
-      <div class="greeting">
-        <div class="word--main" id="wordMain"></div>
-        <div class="word--name" id="wordName"></div>
-      </div>
-      <div class="hearts-row" id="heartsRow">
-        <div class="h-heart"></div>
-        <div class="h-heart"></div>
-        <div class="h-heart"></div>
-        <div class="h-heart"></div>
-        <div class="h-heart"></div>
-      </div>
+  <div class="text-wrap" id="textWrap">
+    <div class="greeting">
+      <div class="word--main" id="wordMain"></div>
+      <div class="word--name" id="wordName"></div>
     </div>
+    <div class="divider" id="divider"></div>
+    <div class="hearts-row" id="heartsRow">
+      <div class="h-heart"></div>
+      <div class="h-heart"></div>
+      <div class="h-heart"></div>
+      <div class="h-heart"></div>
+      <div class="h-heart"></div>
+    </div>
+    <div class="subtitle" id="subtitle">je t'adore</div>
   </div>
 
   <button class="audio-btn" id="audioBtn" title="Toggle music">
@@ -223,16 +243,11 @@
       <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
     </div>
   </button>
-  <div class="audio-hint" id="audioHint">Appuyez pour écouter</div>
 
-  <!-- CDN Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
-
   <script>
     // ============================================
-    // BUILD GREETING LETTERS
+    // BUILD LETTERS
     // ============================================
     const wordMain = document.getElementById('wordMain');
     const wordName = document.getElementById('wordName');
@@ -246,215 +261,219 @@
       s.className = 'letter'; s.textContent = c;
       wordName.appendChild(s);
     });
-    const allLetters = document.querySelectorAll('.letter');
 
     // ============================================
     // SPARKLES
     // ============================================
     const sparkleBox = document.getElementById('sparkles');
-    const spClasses = ['sp-gold', 'sp-rose', 'sp-white'];
-    for (let i = 0; i < 35; i++) {
+    const spCls = ['sp-g','sp-r','sp-w'];
+    for (let i = 0; i < 40; i++) {
       const s = document.createElement('div');
-      s.className = 'sparkle ' + spClasses[i % 3];
+      s.className = 'sparkle ' + spCls[i % 3];
       s.style.left = Math.random() * 100 + '%';
       s.style.top = Math.random() * 100 + '%';
-      s.style.setProperty('--dur', (2.5 + Math.random() * 4) + 's');
-      s.style.setProperty('--delay', (Math.random() * 5) + 's');
-      const sz = 2 + Math.random() * 3;
-      s.style.width = sz + 'px';
-      s.style.height = sz + 'px';
+      s.style.setProperty('--dur', (2 + Math.random() * 5) + 's');
+      s.style.setProperty('--delay', (Math.random() * 6) + 's');
+      const sz = 1.5 + Math.random() * 3;
+      s.style.width = sz + 'px'; s.style.height = sz + 'px';
       sparkleBox.appendChild(s);
     }
 
     // ============================================
-    // CLICK RIPPLE
+    // CLICK EFFECTS
     // ============================================
     document.addEventListener('click', e => {
       if (e.target.closest('.audio-btn')) return;
+      // ripple
       const r = document.createElement('div');
       r.className = 'ripple';
-      r.style.left = e.clientX + 'px';
-      r.style.top = e.clientY + 'px';
+      r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
       document.body.appendChild(r);
       r.addEventListener('animationend', () => r.remove());
+      // burst
+      const syms = ['✦','♡','·','✧'];
+      const cols = ['#d4a853','#c9705a','#e8a0b4','#fff'];
+      for (let i = 0; i < 12; i++) {
+        const b = document.createElement('span');
+        b.className = 'burst';
+        b.textContent = syms[i % syms.length];
+        b.style.left = e.clientX + 'px'; b.style.top = e.clientY + 'px';
+        const a = (Math.PI * 2 / 12) * i + (Math.random() - 0.5) * 0.5;
+        const d = 40 + Math.random() * 60;
+        b.style.setProperty('--tx', Math.cos(a) * d + 'px');
+        b.style.setProperty('--ty', Math.sin(a) * d - 15 + 'px');
+        b.style.fontSize = (0.7 + Math.random() * 0.5) + 'rem';
+        b.style.color = cols[i % cols.length];
+        document.body.appendChild(b);
+        b.addEventListener('animationend', () => b.remove());
+      }
     });
 
     // ============================================
-    // THREE.JS — FLOATING ROSE PETALS
+    // GLOW ORBS — MOUSE PARALLAX
     // ============================================
-    const canvas = document.getElementById('three-canvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(innerWidth, innerHeight);
+    const orb1 = document.getElementById('orb1');
+    const orb2 = document.getElementById('orb2');
+    const orb3 = document.getElementById('orb3');
+    document.addEventListener('mousemove', e => {
+      const cx = innerWidth / 2, cy = innerHeight / 2;
+      const dx = (e.clientX - cx) / cx;
+      const dy = (e.clientY - cy) / cy;
+      orb1.style.transform = `translate(${dx * -20}px, ${dy * -20}px)`;
+      orb2.style.transform = `translate(${dx * 15}px, ${dy * 15}px)`;
+      orb3.style.transform = `translate(${dx * -10}px, ${dy * 12}px)`;
+    });
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 100);
-    camera.position.z = 5;
+    // ============================================
+    // CANVAS — 3D FLOATING HEARTS
+    // ============================================
+    const cvs = document.getElementById('heartsCanvas');
+    const ctx = cvs.getContext('2d');
+    let W, H;
+    function resize() { W = cvs.width = innerWidth; H = cvs.height = innerHeight; }
+    resize();
+    addEventListener('resize', resize);
 
-    // Create heart-shaped texture on offscreen canvas
-    function makeHeartTexture(color, glowColor) {
-      const c = document.createElement('canvas');
-      c.width = 128; c.height = 128;
-      const cx = c.getContext('2d');
+    // Mouse position normalized
+    let mx = 0.5, my = 0.5;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX / innerWidth;
+      my = e.clientY / innerHeight;
+    });
 
-      // glow
-      const grd = cx.createRadialGradient(64, 64, 0, 64, 64, 64);
-      grd.addColorStop(0, glowColor);
-      grd.addColorStop(1, 'rgba(0,0,0,0)');
-      cx.fillStyle = grd;
-      cx.fillRect(0, 0, 128, 128);
-
-      // heart shape
-      cx.save();
-      cx.translate(64, 64);
-      cx.scale(1.8, 1.8);
-      cx.beginPath();
-      cx.moveTo(0, 8);
-      cx.bezierCurveTo(-2, 4, -28, -12, 0, -28);
-      cx.bezierCurveTo(28, -12, 2, 4, 0, 8);
-      cx.closePath();
-
-      const hgrd = cx.createRadialGradient(-5, -8, 0, 0, 0, 25);
-      hgrd.addColorStop(0, color);
-      hgrd.addColorStop(1, 'rgba(0,0,0,0.1)');
-      cx.fillStyle = hgrd;
-      cx.fill();
-
-      // highlight
-      cx.beginPath();
-      cx.arc(-6, -12, 4, 0, Math.PI * 2);
-      cx.fillStyle = 'rgba(255,255,255,0.45)';
-      cx.fill();
-      cx.restore();
-
-      const tex = new THREE.CanvasTexture(c);
-      tex.needsUpdate = true;
-      return tex;
+    // Heart shape path
+    function heartPath(cx, cy, s) {
+      ctx.beginPath();
+      const topY = cy - s * 0.4;
+      ctx.moveTo(cx, cy + s * 0.35);
+      ctx.bezierCurveTo(cx - s * 0.02, cy + s * 0.1, cx - s * 0.7, topY, cx, topY - s * 0.3);
+      ctx.bezierCurveTo(cx + s * 0.7, topY, cx + s * 0.02, cy + s * 0.1, cx, cy + s * 0.35);
+      ctx.closePath();
     }
 
-    const heartTextures = [
-      makeHeartTexture('#d4a853', 'rgba(212,168,83,0.25)'),
-      makeHeartTexture('#c9705a', 'rgba(201,112,90,0.25)'),
-      makeHeartTexture('#e8a0b4', 'rgba(232,160,180,0.2)'),
-      makeHeartTexture('#b8860b', 'rgba(184,134,11,0.2)'),
-      makeHeartTexture('#d4956a', 'rgba(212,149,106,0.2)'),
+    // Heart colors
+    const hColors = [
+      { fill: '#d4a853', glow: 'rgba(212,168,83,0.35)' },
+      { fill: '#c9705a', glow: 'rgba(201,112,90,0.3)' },
+      { fill: '#e8a0b4', glow: 'rgba(232,160,180,0.25)' },
+      { fill: '#b8860b', glow: 'rgba(184,134,11,0.3)' },
+      { fill: '#d4956a', glow: 'rgba(212,149,106,0.25)' },
+      { fill: '#f5f0e8', glow: 'rgba(245,240,232,0.15)' },
     ];
 
-    // Particle system
-    const COUNT = 65;
-    const positions = new Float32Array(COUNT * 3);
-    const scales = new Float32Array(COUNT);
-    const speeds = new Float32Array(COUNT);
-    const drifts = new Float32Array(COUNT);
-    const phases = new Float32Array(COUNT);
+    // Create hearts with 3 depth layers
+    const hearts = [];
+    const HEART_COUNT = 50;
 
-    for (let i = 0; i < COUNT; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 12;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 6 - 1;
-      scales[i] = 0.08 + Math.random() * 0.18;
-      speeds[i] = 0.002 + Math.random() * 0.006;
-      drifts[i] = (Math.random() - 0.5) * 0.003;
-      phases[i] = Math.random() * Math.PI * 2;
+    for (let i = 0; i < HEART_COUNT; i++) {
+      const layer = i < 15 ? 0 : i < 35 ? 1 : 2; // 0=far, 1=mid, 2=near
+      const layerCfg = [
+        { sizeMin: 6, sizeMax: 12, speedMin: 0.15, speedMax: 0.35, alphaMin: 0.15, alphaMax: 0.3, blur: 0 },
+        { sizeMin: 12, sizeMax: 22, speedMin: 0.25, speedMax: 0.55, alphaMin: 0.25, alphaMax: 0.5, blur: 0 },
+        { sizeMin: 22, sizeMax: 38, speedMin: 0.35, speedMax: 0.7, alphaMin: 0.35, alphaMax: 0.65, blur: 1 },
+      ][layer];
+
+      hearts.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        size: layerCfg.sizeMin + Math.random() * (layerCfg.sizeMax - layerCfg.sizeMin),
+        speed: layerCfg.speedMin + Math.random() * (layerCfg.speedMax - layerCfg.speedMin),
+        alpha: layerCfg.alphaMin + Math.random() * (layerCfg.alphaMax - layerCfg.alphaMin),
+        baseAlpha: 0,
+        targetAlpha: layerCfg.alphaMin + Math.random() * (layerCfg.alphaMax - layerCfg.alphaMin),
+        drift: (Math.random() - 0.5) * 0.3,
+        wobblePhase: Math.random() * Math.PI * 2,
+        wobbleSpeed: 0.008 + Math.random() * 0.015,
+        wobbleAmp: 0.3 + Math.random() * 0.5,
+        rot: (Math.random() - 0.5) * 0.3,
+        rotSpeed: (Math.random() - 0.5) * 0.005,
+        color: hColors[Math.floor(Math.random() * hColors.length)],
+        layer,
+        blur: layerCfg.blur,
+        parallaxFactor: [0.02, 0.05, 0.1][layer],
+      });
     }
 
-    const spriteMat = new THREE.SpriteMaterial({
-      map: heartTextures[0],
-      transparent: true,
-      opacity: 0,
-      depthWrite: false,
-      blending: THREE.NormalBlending,
-    });
-
-    const sprites = [];
-    for (let i = 0; i < COUNT; i++) {
-      const mat = spriteMat.clone();
-      mat.map = heartTextures[Math.floor(Math.random() * heartTextures.length)];
-      mat.opacity = 0;
-      const sprite = new THREE.Sprite(mat);
-      sprite.position.set(positions[i*3], positions[i*3+1], positions[i*3+2]);
-      sprite.scale.set(scales[i], scales[i], 1);
-      scene.add(sprite);
-      sprites.push(sprite);
-    }
-
-    // Mouse tracking
-    let mouseX = 0, mouseY = 0;
-    let targetRotX = 0, targetRotY = 0;
-    document.addEventListener('mousemove', e => {
-      mouseX = (e.clientX / innerWidth - 0.5) * 2;
-      mouseY = (e.clientY / innerHeight - 0.5) * 2;
-    });
-
-    // Animation loop
     let heartsVisible = false;
-    const clock = new THREE.Clock();
+    let time = 0;
 
-    function animate() {
-      requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
+    function drawHearts() {
+      ctx.clearRect(0, 0, W, H);
+      time += 1;
 
-      // Smooth camera rotation from mouse
-      targetRotX += (mouseY * 0.15 - targetRotX) * 0.03;
-      targetRotY += (mouseX * -0.15 - targetRotY) * 0.03;
-      scene.rotation.x = targetRotX;
-      scene.rotation.y = targetRotY;
+      // Sort by layer for proper depth rendering
+      hearts.sort((a, b) => a.layer - b.layer);
 
-      // Animate hearts
-      for (let i = 0; i < COUNT; i++) {
-        const sp = sprites[i];
-        // float upward
-        sp.position.y += speeds[i];
-        // gentle horizontal drift
-        sp.position.x += Math.sin(t * 0.5 + phases[i]) * drifts[i];
-        // rotation
-        sp.material.rotation = Math.sin(t * 0.3 + phases[i]) * 0.4;
-
-        // wrap around
-        if (sp.position.y > 7) {
-          sp.position.y = -7;
-          sp.position.x = (Math.random() - 0.5) * 12;
+      for (const h of hearts) {
+        // Animate alpha
+        if (heartsVisible) {
+          h.baseAlpha += (h.targetAlpha - h.baseAlpha) * 0.015;
         }
+
+        // Wobble
+        h.wobblePhase += h.wobbleSpeed;
+        const wobbleX = Math.sin(h.wobblePhase) * h.wobbleAmp;
+
+        // Float upward
+        h.y -= h.speed;
+        h.x += h.drift + wobbleX * 0.1;
+        h.rot += h.rotSpeed;
+
+        // Parallax from mouse
+        const px = (mx - 0.5) * h.parallaxFactor * W;
+        const py = (my - 0.5) * h.parallaxFactor * H;
+
+        // Wrap around
+        if (h.y < -h.size * 2) {
+          h.y = H + h.size * 2;
+          h.x = Math.random() * W;
+        }
+        if (h.x < -h.size * 2) h.x = W + h.size;
+        if (h.x > W + h.size * 2) h.x = -h.size;
+
+        const drawX = h.x + px;
+        const drawY = h.y + py;
+
+        ctx.save();
+        ctx.globalAlpha = h.baseAlpha;
+        ctx.translate(drawX, drawY);
+        ctx.rotate(h.rot);
+
+        // Glow
+        ctx.shadowColor = h.color.glow;
+        ctx.shadowBlur = h.size * (h.blur > 0 ? 0.6 : 0.3);
+
+        // Fill
+        heartPath(0, 0, h.size);
+        const grad = ctx.createRadialGradient(-h.size * 0.15, -h.size * 0.2, 0, 0, 0, h.size * 0.8);
+        grad.addColorStop(0, h.color.fill);
+        grad.addColorStop(1, 'rgba(0,0,0,0.15)');
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Highlight
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(-h.size * 0.15, -h.size * 0.25, h.size * 0.1, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${0.25 + h.layer * 0.1})`;
+        ctx.fill();
+
+        ctx.restore();
       }
 
-      renderer.render(scene, camera);
+      requestAnimationFrame(drawHearts);
     }
-    animate();
-
-    // Resize
-    window.addEventListener('resize', () => {
-      camera.aspect = innerWidth / innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-    });
+    drawHearts();
 
     // ============================================
-    // AUDIO — HOWLER + WEB AUDIO API FALLBACK
+    // WEB AUDIO — PROCEDURAL ROMANTIC PIANO
     // ============================================
-    let audioMode = null; // 'howler' | 'webaudio' | null
-    let pianoPlaying = false;
-
-    // --- Howler attempt ---
-    let howl = null;
-    try {
-      howl = new Howl({
-        src: [
-          'https://upload.wikimedia.org/wikipedia/commons/4/42/Claire_de_lune_%28Claude_Debussy%29.ogg'
-        ],
-        html5: true,
-        volume: 0.35,
-        loop: true,
-        onloaderror: () => { console.log('Howler load failed'); },
-        onplayerror: () => { console.log('Howler play failed'); }
-      });
-    } catch (e) { console.log('Howler init failed'); }
-
-    // --- Web Audio API fallback ---
     let audioCtx = null;
     let masterGain = null;
+    let pianoPlaying = false;
     let pianoTimeout = null;
-    let chordIndex = 0;
-    let noteIndex = 0;
+    let chordIdx = 0;
+    let noteIdx = 0;
 
     const NOTES = {
       C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23,
@@ -462,27 +481,27 @@
       C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99,
     };
 
-    const PROGRESSION = [
+    const CHORDS = [
       [NOTES.C4, NOTES.E4, NOTES.G4, NOTES.C5, NOTES.E5],
       [NOTES.A4, NOTES.C5, NOTES.E5, NOTES.A4, NOTES.C5],
       [NOTES.F4, NOTES.A4, NOTES.C5, NOTES.F5, NOTES.A4],
       [NOTES.G4, NOTES.B4, NOTES.D5, NOTES.G5, NOTES.B4],
     ];
 
-    function initWebAudio() {
+    function initAudio() {
       if (audioCtx) return;
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       masterGain = audioCtx.createGain();
-      masterGain.gain.value = 0.22;
+      masterGain.gain.value = 0.2;
       masterGain.connect(audioCtx.destination);
 
-      // reverb
+      // Reverb
       const delay = audioCtx.createDelay(0.5);
-      delay.delayTime.value = 0.25;
+      delay.delayTime.value = 0.22;
       const fb = audioCtx.createGain();
       fb.gain.value = 0.25;
       const wet = audioCtx.createGain();
-      wet.gain.value = 0.18;
+      wet.gain.value = 0.15;
       masterGain.connect(delay);
       delay.connect(fb);
       fb.connect(delay);
@@ -490,202 +509,135 @@
       wet.connect(audioCtx.destination);
     }
 
-    function playNote(freq, time, duration) {
+    function playNote(freq, time, dur) {
       if (!audioCtx) return;
       const now = audioCtx.currentTime + time;
+
       const osc = audioCtx.createOscillator();
       osc.type = 'sine';
       osc.frequency.value = freq;
       const g = audioCtx.createGain();
-      g.gain.setValueAtTime(0.35, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      g.gain.setValueAtTime(0.3, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + dur);
       osc.connect(g);
       g.connect(masterGain);
       osc.start(now);
-      osc.stop(now + duration);
+      osc.stop(now + dur);
 
-      // harmonic
+      // 2nd harmonic
       const osc2 = audioCtx.createOscillator();
       osc2.type = 'sine';
       osc2.frequency.value = freq * 2;
       const g2 = audioCtx.createGain();
-      g2.gain.setValueAtTime(0.08, now);
-      g2.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.5);
+      g2.gain.setValueAtTime(0.06, now);
+      g2.gain.exponentialRampToValueAtTime(0.001, now + dur * 0.5);
       osc2.connect(g2);
       g2.connect(masterGain);
       osc2.start(now);
-      osc2.stop(now + duration);
+      osc2.stop(now + dur);
     }
 
-    function webAudioLoop() {
+    function pianoLoop() {
       if (!pianoPlaying) return;
-      const chord = PROGRESSION[chordIndex];
-      const note = chord[noteIndex];
-      const isLast = noteIndex === chord.length - 1;
+      const chord = CHORDS[chordIdx];
+      const note = chord[noteIdx];
+      const isLast = noteIdx === chord.length - 1;
       playNote(note, 0, isLast ? 2.0 : 1.2);
 
-      noteIndex++;
-      if (noteIndex >= chord.length) {
-        noteIndex = 0;
-        chordIndex = (chordIndex + 1) % PROGRESSION.length;
+      noteIdx++;
+      if (noteIdx >= chord.length) {
+        noteIdx = 0;
+        chordIdx = (chordIdx + 1) % CHORDS.length;
       }
 
-      pianoTimeout = setTimeout(webAudioLoop, (isLast ? 0.9 : 0.45) * 1000);
+      pianoTimeout = setTimeout(pianoLoop, (isLast ? 0.9 : 0.42) * 1000);
     }
 
-    // --- Toggle logic ---
-    function tryHowler() {
-      if (!howl) return false;
-      try {
-        if (howl.playing()) { howl.pause(); return true; }
-        howl.play();
-        audioMode = 'howler';
-        return true;
-      } catch (e) { return false; }
-    }
-
-    function startWebAudio() {
-      initWebAudio();
+    function startPiano() {
+      initAudio();
       if (audioCtx.state === 'suspended') audioCtx.resume();
       pianoPlaying = true;
-      chordIndex = 0;
-      noteIndex = 0;
-      // Play first note IMMEDIATELY (inside user gesture!)
-      const chord = PROGRESSION[0];
+      chordIdx = 0;
+      noteIdx = 0;
+      // FIRST NOTE IMMEDIATELY — user gesture!
+      const chord = CHORDS[0];
       playNote(chord[0], 0, 1.2);
-      noteIndex = 1;
-      pianoTimeout = setTimeout(webAudioLoop, 450);
-      audioMode = 'webaudio';
+      noteIdx = 1;
+      pianoTimeout = setTimeout(pianoLoop, 420);
     }
 
-    function stopWebAudio() {
+    function stopPiano() {
       pianoPlaying = false;
       clearTimeout(pianoTimeout);
-      audioMode = null;
     }
 
     // ============================================
     // AUDIO BUTTON
     // ============================================
     const audioBtn = document.getElementById('audioBtn');
-    const audioHint = document.getElementById('audioHint');
 
     audioBtn.addEventListener('click', e => {
       e.stopPropagation();
-
-      if (audioMode === 'howler') {
-        howl.pause();
+      if (pianoPlaying) {
+        stopPiano();
         audioBtn.classList.remove('playing');
-        audioMode = null;
-        return;
-      }
-      if (audioMode === 'webaudio') {
-        stopWebAudio();
-        audioBtn.classList.remove('playing');
-        return;
-      }
-
-      // Try Howler first, fallback to Web Audio
-      if (tryHowler()) {
+      } else {
+        startPiano();
         audioBtn.classList.add('playing');
-        audioHint.style.opacity = '0';
-        return;
       }
-
-      startWebAudio();
-      audioBtn.classList.add('playing');
-      audioHint.style.opacity = '0';
     });
 
     // Auto-play on first click anywhere
     let firstClick = true;
     document.addEventListener('click', () => {
-      if (!firstClick) return;
+      if (!firstClick || pianoPlaying) return;
       firstClick = false;
-      if (audioMode) return;
-      // Try Howler
-      if (tryHowler()) {
-        audioBtn.classList.add('playing');
-        return;
-      }
-      // Fallback
-      startWebAudio();
+      startPiano();
       audioBtn.classList.add('playing');
-    }, { once: false });
-
-    // ============================================
-    // CARD TILT
-    // ============================================
-    const card = document.getElementById('card');
-    document.addEventListener('mousemove', e => {
-      const cx = innerWidth / 2, cy = innerHeight / 2;
-      const rx = ((e.clientY - cy) / cy) * -2.5;
-      const ry = ((e.clientX - cx) / cx) * 2.5;
-      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
     });
 
     // ============================================
     // GSAP LOAD SEQUENCE
     // ============================================
-    const tl = gsap.timeline({ delay: 0.3 });
+    const tl = gsap.timeline({ delay: 0.4 });
 
-    // Card entrance
-    tl.to('#cardWrap', {
-      opacity: 1,
-      scale: 1,
-      duration: 1,
-      ease: 'elastic.out(1, 0.6)',
+    // Text entrance
+    tl.to('#textWrap', {
+      opacity: 1, y: 0,
+      duration: 1.2,
+      ease: 'power3.out',
     });
 
     // Bonjour letters
     const mainLetters = wordMain.querySelectorAll('.letter');
     mainLetters.forEach((l, i) => {
-      tl.add(() => l.classList.add('revealed'), 0.8 + i * 0.09);
+      tl.add(() => l.classList.add('revealed'), 0.6 + i * 0.1);
     });
+
+    // Divider line
+    tl.to('#divider', { width: '120px', opacity: 1, duration: 0.8, ease: 'power2.out' }, 1.3);
 
     // Yousra letters
     const nameLetters = wordName.querySelectorAll('.letter');
     nameLetters.forEach((l, i) => {
-      tl.add(() => l.classList.add('revealed'), 1.5 + i * 0.09);
+      tl.add(() => l.classList.add('revealed'), 1.5 + i * 0.1);
     });
 
     // Hearts row
-    tl.to('#heartsRow', { opacity: 1, duration: 0.6, ease: 'power2.out' }, 2.2);
+    tl.to('#heartsRow', { opacity: 1, duration: 0.6, ease: 'power2.out' }, 2.3);
+
+    // Subtitle
+    tl.to('#subtitle', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 2.6);
 
     // Three.js hearts fade in
-    tl.add(() => {
-      heartsVisible = true;
-      sprites.forEach((sp, i) => {
-        gsap.to(sp.material, {
-          opacity: 0.4 + Math.random() * 0.4,
-          duration: 1.5 + Math.random(),
-          delay: i * 0.02,
-          ease: 'power2.out',
-        });
-      });
-    }, 2.0);
+    tl.add(() => { heartsVisible = true; }, 1.5);
 
     // Audio button
     tl.to('#audioBtn', {
-      opacity: 1,
-      scale: 1,
+      opacity: 1, scale: 1,
       duration: 0.5,
       ease: 'back.out(1.7)',
-    }, 2.6);
-
-    // Audio hint
-    tl.to('#audioHint', {
-      opacity: 0.7,
-      duration: 0.6,
-      ease: 'power2.out',
     }, 2.8);
-
-    // Fade hint after 4s
-    tl.to('#audioHint', {
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power2.in',
-    }, 6.5);
   </script>
 </body>
 </html>
